@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.jw.userservice.UserDto.UserRegisterRequestDto;
+import static com.jw.userservice.UserDto.*;
 
 @Service
 @RequiredArgsConstructor
@@ -17,5 +17,17 @@ public class UserService
     {
         User user = userRepository.save(requestDto.toEntity());
         return user.getEmail();
+    }
+
+    public Boolean login(UserLoginRequestDto requestDto)
+    {
+        User user = userRepository.findByEmail(requestDto.getEmail()).orElse(null);
+
+        if (user == null)
+        {
+            return false;
+        }
+
+        return user.getPassword().equals(requestDto.getPassword());
     }
 }
