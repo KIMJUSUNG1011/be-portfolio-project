@@ -8,17 +8,17 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
+@EnableRedisHttpSession
 @Configuration
 public class RedisConfiguration
 {
     @Value("${spring.redis.host}")
     private String host;
 
-    /*
     @Value("${spring.redis.password}")
     private String password;
-     */
 
     @Value("${spring.redis.port}")
     private int port;
@@ -26,7 +26,7 @@ public class RedisConfiguration
     @Bean
     public LettuceConnectionFactory lettuceConnectionFactory() {
         final RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(host, port);
-        // redisStandaloneConfiguration.setPassword(RedisPassword.of(password));
+        redisStandaloneConfiguration.setPassword(RedisPassword.of(password));
         return new LettuceConnectionFactory(redisStandaloneConfiguration);
     }
 
