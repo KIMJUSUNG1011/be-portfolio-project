@@ -1,10 +1,15 @@
 package com.jw.userservice;
 
+import com.netflix.discovery.converters.Auto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +24,12 @@ class UserServiceTest
 {
     @Autowired
     UserService userService;
+
+    @Autowired
+    RedisTemplate<String, Object> redisTemplate;
+
+    MockHttpSession session;
+    MockHttpServletRequest request;
 
     @Test
     void register()
@@ -48,6 +59,21 @@ class UserServiceTest
         // then : 결과
         Boolean result = userService.login(requestDto);
 
-        Assertions.assertThat(result).isEqualTo(true);
+        String redis = null;
+
+        if (result) {
+            session = new MockHttpSession();
+            session.setAttribute("email", requestDto.getEmail());
+
+            request = new MockHttpServletRequest();
+            request.setSession(session);
+
+            ValueOperations<String, Object> operations = redisTemplate.opsForValue();
+            operations.set("test_key", "test_value");
+            redis = (String)operations.get("test_key");
+        }
+
+        // Assertions.assertThat(result).isEqualTo(true);
+        Assertions.assertThat(redis).isEqualTo("test_value");
     }
 }

@@ -1,5 +1,6 @@
 spring:
   redis:
-    host: localhost
-    password: 12345
+    host: ec2-3-39-21-95.ap-northeast-2.compute.amazonaws.com
     port: 6379
+  session:
+    store-type: redis

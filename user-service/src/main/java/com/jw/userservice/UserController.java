@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
+
 import static com.jw.userservice.UserDto.*;
 
 @RestController
@@ -23,9 +25,12 @@ public class UserController
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Boolean> login(@RequestBody UserLoginRequestDto requestDto)
+    public ResponseEntity<Boolean> login(@RequestBody UserLoginRequestDto requestDto, HttpSession session)
     {
         Boolean result = userService.login(requestDto);
+        if (result) {
+            session.setAttribute("email", requestDto.getEmail());
+        }
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }
