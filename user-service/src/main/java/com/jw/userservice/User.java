@@ -25,4 +25,11 @@ public class User extends BaseTimeEntity
     private String password;
     private String name;
     private String phone;
+
+    public void update(User user)
+    {
+        password = user.password;
+        name = user.name;
+        phone = user.phone;
+    }
 }

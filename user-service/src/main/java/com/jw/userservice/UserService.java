@@ -28,10 +28,30 @@ public class UserService
         User user = userRepository.findByEmail(requestDto.getEmail()).orElse(null);
 
         if (user == null)
-        {
             return false;
-        }
 
         return passwordEncoder.matches(requestDto.getPassword(), user.getPassword());
+    }
+
+    public Boolean update(UserUpdateRequestDto requestDto)
+    {
+        User user = userRepository.findByEmail(requestDto.getEmail()).orElse(null);
+        if(user == null)
+            return false;
+
+        String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
+        user.update(requestDto.toEntity(encodedPassword));
+
+        return true;
+    }
+
+    public Boolean withdraw(UserWithdrawRequestDto requestDto)
+    {
+        User user = userRepository.findByEmail(requestDto.getEmail()).orElse(null);
+        if(user == null)
+            return false;
+
+        userRepository.delete(user);
+        return true;
     }
 }

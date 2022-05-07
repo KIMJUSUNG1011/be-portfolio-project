@@ -40,4 +40,33 @@ public class UserDto
             return User.builder().email(email).password(password).build();
         }
     }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    static class UserUpdateRequestDto
+    {
+        private String email;
+        private String password;
+        private String name;
+        private String phone;
+
+        public User toEntity(String encodedPassword)
+        {
+            return User.builder()
+                    .email(email)
+                    .password(encodedPassword)
+                    .name(name)
+                    .phone(phone)
+                    .build();
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    static class UserWithdrawRequestDto
+    {
+        private String email;
+    }
 }
