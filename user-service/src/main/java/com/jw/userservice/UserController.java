@@ -29,9 +29,8 @@ public class UserController
     {
         Boolean result = userService.login(requestDto);
         if (result)
-        {
-            session.setAttribute("email", requestDto.getEmail());
-        }
+            session.setAttribute(requestDto.getEmail(), requestDto.getEmail());
+
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }
