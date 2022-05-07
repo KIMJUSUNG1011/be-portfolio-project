@@ -74,7 +74,7 @@ class UserServiceTest
             redis = (String)operations.get("test_key");
         }
 
-        // Assertions.assertThat(result).isEqualTo(true);
+        Assertions.assertThat(result).isEqualTo(true);
         Assertions.assertThat(redis).isEqualTo("test_value");
     }
 }

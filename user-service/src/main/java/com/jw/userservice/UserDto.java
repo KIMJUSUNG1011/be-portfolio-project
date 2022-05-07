@@ -4,13 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-/**
- * Created by WOOSERK.
- * User: WOOSERK
- * Date: 2022-05-05
- * Time: 오후 8:18
- */
-
 public class UserDto
 {
     @Getter
@@ -23,11 +16,11 @@ public class UserDto
         private String name;
         private String phone;
 
-        public User toEntity()
+        public User toEntity(String encodedPassword)
         {
             return User.builder()
                     .email(email)
-                    .password(password)
+                    .password(encodedPassword)
                     .name(name)
                     .phone(phone)
                     .build();
