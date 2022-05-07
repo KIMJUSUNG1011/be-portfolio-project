@@ -1,6 +1,6 @@
 package com.jw.userservice;
 
-import com.netflix.discovery.converters.Auto;
+import com.jw.userservice.UserDto.UserLoginRequestDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,13 +10,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
-import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.jw.userservice.UserDto.UserRegisterRequestDto;
-
-import com.jw.userservice.UserDto.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
