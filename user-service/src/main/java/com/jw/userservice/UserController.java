@@ -11,6 +11,7 @@ import static com.jw.userservice.UserDto.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/user-service")
 public class UserController
 {
     private final UserService userService;
