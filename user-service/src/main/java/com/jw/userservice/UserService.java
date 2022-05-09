@@ -22,7 +22,6 @@ public class UserService
         return user.getEmail();
     }
 
-    @Transactional(readOnly = true)
     public Boolean login(UserLoginRequestDto requestDto)
     {
         User user = userRepository.findByEmail(requestDto.getEmail()).orElse(null);

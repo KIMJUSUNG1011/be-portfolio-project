@@ -30,10 +30,18 @@ public class UserController
         if (result)
             session.setAttribute("email", requestDto.getEmail());
 
-        System.out.println(session.getId());
-        System.out.println(session.getAttribute("email"));
-
         return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Boolean> logout(HttpSession session)
+    {
+        Object ret = session.getAttribute("email");
+        if(ret == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+
+        session.removeAttribute("email");
+        return ResponseEntity.status(HttpStatus.OK).body(true);
     }
 
     @PutMapping("/update")
