@@ -1,6 +1,12 @@
 server:
   port: 0
 spring:
+  redis:
+    host: ec2-3-39-21-95.ap-northeast-2.compute.amazonaws.com
+    password: fuckingbot
+    port: 6379
+  session:
+    store-type: redis
   application:
     name: board-service
   h2:
