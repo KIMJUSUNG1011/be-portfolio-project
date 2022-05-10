@@ -32,7 +32,7 @@ public class BoardService
             return false;
         }
 
-        board.update(board);
+        board.update(requestDto.toEntity());
         return true;
     }
 

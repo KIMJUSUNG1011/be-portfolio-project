@@ -12,11 +12,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 import com.jw.boardservice.BoardDto.*;
@@ -38,23 +33,30 @@ class BoardServiceTest
         String content = "내용1";
         String email = "dlrtls12345@naver.com";
 
-        BoardWriteRequestDto requestDto = new BoardWriteRequestDto(title, content);
+        Board board = new Board(1L, title, content, email, 0);
 
         // mocking
-        when(boardRepository.save(requestDto.toEntity(email))).thenReturn(new Board());
+        when(boardRepository.save(any())).thenReturn(board);
+
+        BoardWriteRequestDto requestDto = new BoardWriteRequestDto(title, content);
 
         // when
-        boardService.write(email, requestDto);
+        Long id = boardService.write(email, requestDto);
+
+        assertThat(id).isEqualTo(board.getId());
     }
 
     @Test
     void edit()
     {
-        Long id = (long)0;
-
+        Long id = 1L;
         String title = "제목2";
         String content = "내용2";
         String email = "dlrtls12345@naver.com";
+
+        Board board = new Board(1L, title, content, email, 0);
+
+        when(boardRepository.findById(1L)).thenReturn(Optional.of(board));
 
         BoardEditRequestDto requestDto = new BoardEditRequestDto(title, content);
 
