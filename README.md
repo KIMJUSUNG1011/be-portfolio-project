@@ -11,15 +11,15 @@
 | post    | /register    | 회원가입   | String | CREATED |  |
 | post    | /login    | 로그인    | Boolean | OK | |
 | post    | /logout    | 로그아웃    | Boolean | OK | NOT_FOUND |
-| put    | /update    | 회원정보수정    | Boolean | CREATED |  |
-| delete | /withdraw    | 회원탈퇴    | Boolean | NO_CONTENT | |
+| put    | /update    | 회원정보수정    | Boolean | CREATED | NOT_FOUND  |
+| delete | /withdraw    | 회원탈퇴    | Boolean | OK | NOT_FOUND |
 
 ### board 마이크로서비스(/board-service)
 
 | method  | uri  | description  | return | success | fail |
 |:----------|:----------|:----------|:--------|:------------|:-----------|
 | post    | /write    | 글 작성   | Long | CREATED | |
-| put    | /{id}    | 글 수정    | Boolean | CREATED | |
-| delete | /{id}    | 글 삭제    | Boolean | NO_CONTENT | |
-| get | /{id} | 글 조회 | Board | OK | |
-| get | / | 글 목록 조회 | List<Board> | OK | |  
+| put    | /{id}    | 글 수정    | Boolean | CREATED | NOT_FOUND |
+| delete | /{id}    | 글 삭제    | Boolean | OK | NOT_FOUND |
+| get | /{id} | 글 조회 | Board | OK | NOT_FOUND |
+| get | / | 글 목록 조회 | List<Board> | OK | NOT_FOUND |  
