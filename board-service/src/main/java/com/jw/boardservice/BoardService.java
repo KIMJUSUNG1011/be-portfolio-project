@@ -20,20 +20,20 @@ public class BoardService
         return board.getId();
     }
 
-    public Long edit(Long id, String email, BoardEditRequestDto requestDto)
+    public boolean edit(Long id, String email, BoardEditRequestDto requestDto)
     {
         Board board = boardRepository.findById(id).orElse(null);
 
         if (board == null) {
-            return null;
+            return false;
         }
 
         if (!email.equals(board.getEmail())) {
-            return null;
+            return false;
         }
 
         board.update(board);
-        return board.getId();
+        return true;
     }
 
     public Boolean delete(Long id)

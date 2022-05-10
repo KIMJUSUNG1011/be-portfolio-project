@@ -28,13 +28,13 @@ public class BoardController
     public ResponseEntity<Long> edit(HttpSession session, @RequestParam("id") Long id, @RequestBody BoardEditRequestDto requestDto)
     {
         String email = (String)session.getAttribute("email");
-        Long ret = boardService.edit(id, email, requestDto);
+        Boolean result = boardService.edit(id, email, requestDto);
 
-        if (ret == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(id);
+        if (result) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(id);
         }
         else {
-            return ResponseEntity.status(HttpStatus.CREATED).body(id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(id);
         }
     }
 

@@ -1,6 +1,7 @@
 package com.jw.boardservice;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +12,6 @@ public class BoardDto
     @AllArgsConstructor
     static class BoardWriteRequestDto
     {
-
         private String title;
         private String content;
 
