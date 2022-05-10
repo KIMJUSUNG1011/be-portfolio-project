@@ -1,6 +1,7 @@
 package com.jw.boardservice;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import com.jw.boardservice.BoardDto.*;
@@ -28,20 +29,32 @@ public class BoardController
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> remove(HttpSession session, @RequestParam("id") Long id)
+    public ResponseEntity<Boolean> delete(HttpSession session, @RequestParam("id") Long id)
     {
-        return null;
+        Boolean result = boardService.delete(id);
+        if(!result)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<String> read(@RequestParam("id") Long id)
+    public ResponseEntity<Board> read(@RequestParam("id") Long id)
     {
-        return null;
+        Board board = boardService.read(id);
+        if(board == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+
+        return ResponseEntity.status(HttpStatus.OK).body(board);
     }
 
     @GetMapping("/")
     public ResponseEntity<List<Board>> list()
     {
-        return null;
+        List<Board> boardList = boardService.list();
+        if(boardList == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+
+        return ResponseEntity.status(HttpStatus.OK).body(boardList);
     }
 }

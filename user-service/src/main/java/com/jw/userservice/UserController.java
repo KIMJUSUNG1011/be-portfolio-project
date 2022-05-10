@@ -55,6 +55,6 @@ public class UserController
     public ResponseEntity<Boolean> withdraw(@RequestBody UserWithdrawRequestDto requestDto)
     {
         Boolean result = userService.withdraw(requestDto);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(result);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

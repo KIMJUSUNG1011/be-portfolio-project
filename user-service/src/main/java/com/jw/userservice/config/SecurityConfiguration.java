@@ -20,8 +20,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
                 .csrf().disable();
     }
 
-    // js's full request test
-
     @Override
     public void configure(WebSecurity web)
     {

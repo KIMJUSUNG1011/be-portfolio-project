@@ -24,20 +24,25 @@ public class BoardService
         return null;
     }
 
-    public Boolean remove(Long id)
+    public Boolean delete(Long id)
     {
-        return false;
+        Board board = boardRepository.findById(id).orElse(null);
+        if(board == null)
+            return false;
+
+        boardRepository.delete(board);
+        return true;
     }
 
     @Transactional(readOnly = true)
     public Board read(Long id)
     {
-        return null;
+        return boardRepository.findById(id).orElse(null);
     }
 
     @Transactional(readOnly = true)
     public List<Board> list()
     {
-        return null;
+        return boardRepository.findAll();
     }
 }
