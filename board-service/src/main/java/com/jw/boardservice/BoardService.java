@@ -14,14 +14,26 @@ public class BoardService
 {
     private final BoardRepository boardRepository;
 
-    public Long write(BoardWriteRequestDto requestDto)
+    public Long write(String email, BoardWriteRequestDto requestDto)
     {
-        return null;
+        Board board = boardRepository.save(requestDto.toEntity(email));
+        return board.getId();
     }
 
-    public Long edit(Long id, BoardEditRequestDto requestDto)
+    public Long edit(Long id, String email, BoardEditRequestDto requestDto)
     {
-        return null;
+        Board board = boardRepository.findById(id).orElse(null);
+
+        if (board == null) {
+            return null;
+        }
+
+        if (!email.equals(board.getEmail())) {
+            return null;
+        }
+
+        board.update(board);
+        return board.getId();
     }
 
     public Boolean delete(Long id)

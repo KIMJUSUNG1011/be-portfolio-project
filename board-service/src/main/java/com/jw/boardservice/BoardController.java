@@ -17,15 +17,25 @@ public class BoardController
     private final BoardService boardService;
 
     @PostMapping("/write")
-    public ResponseEntity<String> write(HttpSession session, @RequestBody BoardWriteRequestDto requestDto)
+    public ResponseEntity<Long> write(HttpSession session, @RequestBody BoardWriteRequestDto requestDto)
     {
-        return null;
+        String email = (String)session.getAttribute("email");
+        Long id = boardService.write(email, requestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(id);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> edit(HttpSession session, @RequestParam("id") Long id, @RequestBody BoardEditRequestDto requestDto)
+    public ResponseEntity<Long> edit(HttpSession session, @RequestParam("id") Long id, @RequestBody BoardEditRequestDto requestDto)
     {
-        return null;
+        String email = (String)session.getAttribute("email");
+        Long ret = boardService.edit(id, email, requestDto);
+
+        if (ret == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(id);
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.CREATED).body(id);
+        }
     }
 
     @DeleteMapping("/{id}")
