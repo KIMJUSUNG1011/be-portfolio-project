@@ -27,16 +27,6 @@ public class UserService implements UserDetailsService
         return user.getEmail();
     }
 
-    public Boolean login(UserLoginRequestDto requestDto)
-    {
-        User user = userRepository.findByEmail(requestDto.getEmail()).orElse(null);
-
-        if (user == null)
-            return false;
-
-        return passwordEncoder.matches(requestDto.getPassword(), user.getPassword());
-    }
-
     public Boolean update(UserUpdateRequestDto requestDto)
     {
         User user = userRepository.findByEmail(requestDto.getEmail()).orElse(null);
@@ -68,4 +58,16 @@ public class UserService implements UserDetailsService
 
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), new ArrayList<>());
     }
+
+/*
+    public Boolean login(UserLoginRequestDto requestDto)
+    {
+        User user = userRepository.findByEmail(requestDto.getEmail()).orElse(null);
+
+        if (user == null)
+            return false;
+
+        return passwordEncoder.matches(requestDto.getPassword(), user.getPassword());
+    }
+*/
 }
