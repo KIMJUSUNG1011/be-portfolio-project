@@ -11,7 +11,6 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/board-service")
 public class BoardController
 {
     private final BoardService boardService;

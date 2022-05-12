@@ -12,7 +12,6 @@ import static com.jw.userservice.UserDto.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user-service")
 public class UserController
 {
     private final UserService userService;
@@ -21,6 +20,7 @@ public class UserController
     public ResponseEntity<String> register(@RequestBody UserRegisterRequestDto requestDto)
     {
         String email = userService.register(requestDto);
+        System.out.println(email);
         return ResponseEntity.status(HttpStatus.CREATED).body(email);
     }
 
