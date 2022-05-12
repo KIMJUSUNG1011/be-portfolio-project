@@ -26,7 +26,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
                     .headers().frameOptions().disable()
                 .and()
                     .authorizeRequests()
+<<<<<<< Updated upstream
                         .antMatchers("/register/**", "/h2-console/**").permitAll()
+=======
+                        .antMatchers("/register", "/h2-console/**").permitAll()
+>>>>>>> Stashed changes
                         .anyRequest().authenticated();
     }
 }
