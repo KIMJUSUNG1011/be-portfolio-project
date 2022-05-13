@@ -1,7 +1,7 @@
 package com.jw.userservice;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,12 +22,12 @@ public class UserService implements UserDetailsService {
 
     public String register(UserRegisterRequestDto requestDto) {
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
-        User user = userRepository.save(requestDto.toEntity(encodedPassword));
+        UserEntity user = userRepository.save(requestDto.toEntity(encodedPassword));
         return user.getEmail();
     }
 
     public Boolean update(UserUpdateRequestDto requestDto) {
-        User user = userRepository.findByEmail(requestDto.getEmail()).orElse(null);
+        UserEntity user = userRepository.findByEmail(requestDto.getEmail()).orElse(null);
         if (user == null)
             return false;
 
@@ -38,7 +38,7 @@ public class UserService implements UserDetailsService {
     }
 
     public Boolean withdraw(UserWithdrawRequestDto requestDto) {
-        User user = userRepository.findByEmail(requestDto.getEmail()).orElse(null);
+        UserEntity user = userRepository.findByEmail(requestDto.getEmail()).orElse(null);
         if (user == null)
             return false;
 
@@ -46,13 +46,18 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
+    public UserEntity findByEmail(String email)
+    {
+        return userRepository.findByEmail(email).orElse(null);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email).orElse(null);
+        UserEntity user = userRepository.findByEmail(email).orElse(null);
         if (user == null)
             throw new UsernameNotFoundException(email);
 
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), new ArrayList<>());
+        return new User(user.getEmail(), user.getPassword(), new ArrayList<>());
     }
 
 /*

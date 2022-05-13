@@ -9,16 +9,16 @@ public class UserDto
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    static class UserRegisterRequestDto
+    public static class UserRegisterRequestDto
     {
         private String email;
         private String password;
         private String name;
         private String phone;
 
-        public User toEntity(String encodedPassword)
+        public UserEntity toEntity(String encodedPassword)
         {
-            return User.builder()
+            return UserEntity.builder()
                     .email(email)
                     .password(encodedPassword)
                     .name(name)
@@ -30,30 +30,30 @@ public class UserDto
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    static class UserLoginRequestDto
+    public static class UserLoginRequestDto
     {
         private String email;
         private String password;
 
-        public User toEntity()
+        public UserEntity toEntity()
         {
-            return User.builder().email(email).password(password).build();
+            return UserEntity.builder().email(email).password(password).build();
         }
     }
 
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    static class UserUpdateRequestDto
+    public static class UserUpdateRequestDto
     {
         private String email;
         private String password;
         private String name;
         private String phone;
 
-        public User toEntity(String encodedPassword)
+        public UserEntity toEntity(String encodedPassword)
         {
-            return User.builder()
+            return UserEntity.builder()
                     .email(email)
                     .password(encodedPassword)
                     .name(name)
@@ -65,8 +65,26 @@ public class UserDto
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    static class UserWithdrawRequestDto
+    public static class UserWithdrawRequestDto
     {
         private String email;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class UserResponseDto
+    {
+        private String email;
+        private String password;
+        private String name;
+        private String phone;
+
+        public UserResponseDto(UserEntity entity)
+        {
+            email = entity.getEmail();
+            password = entity.getPassword();
+            name = entity.getName();
+            phone = entity.getPhone();
+        }
     }
 }

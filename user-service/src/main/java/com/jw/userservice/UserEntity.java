@@ -15,7 +15,7 @@ import javax.persistence.Id;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User extends BaseTimeEntity
+public class UserEntity extends BaseTimeEntity
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,10 +26,10 @@ public class User extends BaseTimeEntity
     private String name;
     private String phone;
 
-    public void update(User user)
+    public void update(UserEntity userEntity)
     {
-        password = user.password;
-        name = user.name;
-        phone = user.phone;
+        password = userEntity.password;
+        name = userEntity.name;
+        phone = userEntity.phone;
     }
 }

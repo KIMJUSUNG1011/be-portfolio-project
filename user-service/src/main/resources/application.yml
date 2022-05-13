@@ -3,7 +3,7 @@ server:
 
 spring:
   redis:
-    host: ec2-3-39-21-95.ap-northeast-2.compute.amazonaws.com
+    host: ec2-54-180-8-119.ap-northeast-2.compute.amazonaws.com
     password: fuckingbot
     port: 6379
   session:
@@ -28,3 +28,7 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://127.0.0.1:8761/eureka
+
+token:
+  expiration_time: 86400000
+  secret: user_token

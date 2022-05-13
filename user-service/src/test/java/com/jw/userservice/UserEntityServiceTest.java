@@ -19,7 +19,7 @@ import static com.jw.userservice.UserDto.UserRegisterRequestDto;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @Transactional
-class UserServiceTest
+class UserEntityServiceTest
 {
     @Autowired
     UserService userService;
