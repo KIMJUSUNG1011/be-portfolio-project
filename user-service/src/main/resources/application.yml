@@ -3,8 +3,8 @@ server:
 
 spring:
   redis:
-    host: ec2-54-180-8-119.ap-northeast-2.compute.amazonaws.com
-    password: fuckingbot
+    host: ENC(yha6a9F8LiwHb6JXePz6nZmlX8CH1sOYb4dIpyVAZjZLFJEBtXpm0vj36Jf6icBCBL6try2afbp/MqeFOd1UWQ==)
+    password: ENC(wnaFaxnI5HNitC+hmbvdJ51kAuc7D6i4)
     port: 6379
   session:
     store-type: redis
@@ -32,3 +32,7 @@ eureka:
 token:
   expiration_time: 86400000
   secret: user_token
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
