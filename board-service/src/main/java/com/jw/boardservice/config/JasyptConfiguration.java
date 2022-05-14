@@ -1,12 +1,32 @@
 package com.jw.boardservice.config;
 
-/**
- * Created by WOOSERK.
- * User: WOOSERK
- * Date: 2022-05-14
- * Time: 오후 9:54
- */
+import org.jasypt.encryption.StringEncryptor;
+import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
+import org.jasypt.encryption.pbe.config.SimpleStringPBEConfig;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-public class JasyptConfig
+@Configuration
+public class JasyptConfiguration
 {
+    @Value("${jasypt.encryptor.password}")
+    private String key;
+
+    @Bean("jasyptStringEncryptor")
+    public StringEncryptor stringEncryptor()
+    {
+        PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
+        SimpleStringPBEConfig config = new SimpleStringPBEConfig();
+        config.setPassword(key);
+        config.setAlgorithm("PBEWithMD5AndDES");
+        config.setKeyObtentionIterations("1000");
+        config.setPoolSize("1");
+        config.setProviderName("SunJCE");
+        config.setSaltGeneratorClassName("org.jasypt.salt.RandomSaltGenerator");
+        config.setStringOutputType("base64");
+        encryptor.setConfig(config);
+
+        return encryptor;
+    }
 }

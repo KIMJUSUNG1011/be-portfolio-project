@@ -2,8 +2,8 @@ server:
   port: 0
 spring:
   redis:
-    host: ec2-3-39-21-95.ap-northeast-2.compute.amazonaws.com
-    password: fuckingbot
+    host: ENC(eN+RFbInPEywPanIzjlHgni17lvbqnNJaGEvkwc2cM+MR8HOv9gPp8p2N5tl0cGmjwhX+rUkLcG4tzRYYFFctA==)
+    password: ENC(u2XDudnJ+3Av/nAPEX8e+MQ+0XUn9pSI)
     port: 6379
   session:
     store-type: redis
@@ -24,3 +24,7 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://127.0.0.1:8761/eureka
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
