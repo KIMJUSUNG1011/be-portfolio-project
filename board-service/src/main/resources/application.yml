@@ -1,21 +1,19 @@
 server:
   port: 0
+
 spring:
+  # config server 정보
   config:
     import: "optional:configserver:http://localhost:8888/"
   cloud:
     config:
-      name:
-      profile:
+      name: config
+      profile: dev
   management:
     endpoints:
       web:
         exposure:
           include:
-  redis:
-    host: ENC(eN+RFbInPEywPanIzjlHgni17lvbqnNJaGEvkwc2cM+MR8HOv9gPp8p2N5tl0cGmjwhX+rUkLcG4tzRYYFFctA==)
-    password: ENC(u2XDudnJ+3Av/nAPEX8e+MQ+0XUn9pSI)
-    port: 6379
   session:
     store-type: redis
   application:
@@ -29,6 +27,7 @@ spring:
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:testdb
+
 eureka:
   client:
     register-with-eureka: true

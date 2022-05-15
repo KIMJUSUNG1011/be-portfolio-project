@@ -2,21 +2,18 @@ server:
   port: 0
 
 spring:
+  # config server 정보
   config:
     import: "optional:configserver:http://localhost:8888/"
   cloud:
     config:
-      name:
-      profile:
+      name: config
+      profile: dev
   management:
     endpoints:
       web:
         exposure:
           include:
-  redis:
-    host: ENC(yha6a9F8LiwHb6JXePz6nZmlX8CH1sOYb4dIpyVAZjZLFJEBtXpm0vj36Jf6icBCBL6try2afbp/MqeFOd1UWQ==)
-    password: ENC(wnaFaxnI5HNitC+hmbvdJ51kAuc7D6i4)
-    port: 6379
   session:
     store-type: redis
   application:

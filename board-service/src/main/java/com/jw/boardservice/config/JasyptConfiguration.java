@@ -25,7 +25,6 @@ public class JasyptConfiguration
         config.setSaltGeneratorClassName("org.jasypt.salt.RandomSaltGenerator");
         config.setStringOutputType("base64");
         encryptor.setConfig(config);
-
         return encryptor;
     }
 }
