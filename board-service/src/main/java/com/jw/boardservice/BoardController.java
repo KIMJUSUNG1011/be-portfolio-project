@@ -9,6 +9,7 @@ import com.jw.boardservice.BoardDto.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -20,10 +21,17 @@ public class BoardController
     @PostMapping(value = "/write", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Long> write(HttpSession session,
                                       @RequestPart BoardWriteRequestDto requestDto,
-                                      @RequestPart List<MultipartFile> files)
+                                      @RequestPart(value = "files", required = false) List<MultipartFile> files) throws Exception
     {
         String email = (String)session.getAttribute("email");
         Long id = boardService.write(email, requestDto);
+
+        for(MultipartFile file : files)
+        {
+            System.out.println(file.getOriginalFilename());
+            String str = System.nanoTime() + file.getOriginalFilename();
+            file.transferTo(new File(str));
+        }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(id);
     }
