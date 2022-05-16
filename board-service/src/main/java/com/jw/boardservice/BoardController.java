@@ -2,9 +2,11 @@ package com.jw.boardservice;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import com.jw.boardservice.BoardDto.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -15,11 +17,14 @@ public class BoardController
 {
     private final BoardService boardService;
 
-    @PostMapping("/write")
-    public ResponseEntity<Long> write(HttpSession session, @RequestBody BoardWriteRequestDto requestDto)
+    @PostMapping(value = "/write", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Long> write(HttpSession session,
+                                      @RequestPart BoardWriteRequestDto requestDto,
+                                      @RequestPart List<MultipartFile> files)
     {
         String email = (String)session.getAttribute("email");
         Long id = boardService.write(email, requestDto);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(id);
     }
 
