@@ -22,7 +22,6 @@ public class FileEntity
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
-    @JsonIgnore
     private Board board;
 
     @Column(nullable = false)

@@ -10,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -21,25 +23,11 @@ public class BoardService
     private final BoardRepository boardRepository;
     private final FileRepository fileRepository;
 
-    public Long write(String email, BoardWriteRequestDto requestDto, List<MultipartFile> files) throws IOException
+    public Long write(String email, BoardWriteRequestDto requestDto, List<MultipartFile> files) throws Exception
     {
         Board board = boardRepository.save(requestDto.toEntity(email));
 
-        for (MultipartFile file : files)
-        {
-            FileWriteRequestDto fileWriteRequestDto = new FileWriteRequestDto(
-                    System.nanoTime() + file.getOriginalFilename(),
-                    file.getOriginalFilename(),
-                    file.getSize()
-            );
-
-            file.transferTo(new File(fileWriteRequestDto.getName()));
-            FileEntity fileEntity = fileWriteRequestDto.toEntity(board);
-
-            board.addFile(fileEntity);
-
-            fileRepository.save(fileEntity);
-        }
+        uploadFiles(board, files);
 
         return board.getId();
     }
@@ -67,18 +55,70 @@ public class BoardService
             return false;
 
         boardRepository.delete(board);
+
         return true;
     }
 
     @Transactional(readOnly = true)
-    public Board read(Long id)
+    public BoardReadResponseDto read(Long id)
     {
-        return boardRepository.findById(id).orElse(null);
+        Board board = boardRepository.findById(id).orElse(null);
+
+        BoardReadResponseDto readResponseDto = attachFilesToBoard(board);
+
+        return readResponseDto;
     }
 
     @Transactional(readOnly = true)
     public List<Board> list()
     {
         return boardRepository.findAll();
+    }
+
+    private void uploadFiles(Board board, List<MultipartFile> files) throws Exception
+    {
+        for (MultipartFile file : files)
+        {
+            FileWriteRequestDto fileWriteRequestDto = new FileWriteRequestDto(
+                    System.nanoTime() + file.getOriginalFilename(),
+                    file.getOriginalFilename(),
+                    file.getSize()
+            );
+
+            file.transferTo(new File(fileWriteRequestDto.getName()));
+
+            FileEntity fileEntity = fileWriteRequestDto.toEntity(board);
+
+            board.addFile(fileEntity);
+
+            fileRepository.save(fileEntity);
+        }
+    }
+
+    private BoardReadResponseDto attachFilesToBoard(Board board)
+    {
+        List<FileEntity> files = board.getFiles();
+        List<FileReadResponseDto> responseFiles = new ArrayList<>();
+
+        String location = System.getProperty("java.io.tmpdir");
+
+        for (FileEntity f : files) {
+            Path path = Paths.get(location, f.getPath());
+            responseFiles.add(new FileReadResponseDto(
+                    f.getName(), path.toString(), f.getSize()
+            ));
+        }
+
+        BoardReadResponseDto readResponseDto = new BoardReadResponseDto(
+                board.getId(),
+                board.getTitle(),
+                board.getContent(),
+                board.getEmail(),
+                board.getCount(),
+                board.getRegisterDate(),
+                responseFiles
+        );
+
+        return readResponseDto;
     }
 }

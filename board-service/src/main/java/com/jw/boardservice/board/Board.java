@@ -46,7 +46,8 @@ public class Board extends BaseTimeEntity
         this.count = this.count + 1;
     }
 
-    public void addFile(FileEntity fileEntity) {
+    public void addFile(FileEntity fileEntity)
+    {
         files.add(fileEntity);
         fileEntity.mapBoard(this);
     }
