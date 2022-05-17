@@ -4,6 +4,7 @@ import com.jw.boardservice.board.Board;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public class FileDto
 {
@@ -24,5 +25,15 @@ public class FileDto
                     .size(size)
                     .build();
         }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class FileReadResponseDto
+    {
+        private String name;
+        private String path;
+        private Long size;
     }
 }

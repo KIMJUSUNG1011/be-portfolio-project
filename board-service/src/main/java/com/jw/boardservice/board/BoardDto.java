@@ -1,8 +1,12 @@
 package com.jw.boardservice.board;
 
+import com.jw.boardservice.file.FileDto.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class BoardDto
 {
@@ -39,5 +43,19 @@ public class BoardDto
                     .content(content)
                     .build();
         }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    static class BoardReadResponseDto
+    {
+        private Long id;
+        private String title;
+        private String content;
+        private String email;
+        private int count;
+        private LocalDateTime registerDate;
+        private List<FileReadResponseDto> files;
     }
 }

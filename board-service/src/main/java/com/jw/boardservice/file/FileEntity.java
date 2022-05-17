@@ -1,5 +1,6 @@
 package com.jw.boardservice.file;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jw.boardservice.board.Board;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +22,7 @@ public class FileEntity
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
+    @JsonIgnore
     private Board board;
 
     @Column(nullable = false)
