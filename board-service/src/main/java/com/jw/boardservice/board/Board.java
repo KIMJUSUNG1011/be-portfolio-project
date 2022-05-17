@@ -1,14 +1,15 @@
-package com.jw.boardservice;
+package com.jw.boardservice.board;
 
+import com.jw.boardservice.BaseTimeEntity;
+import com.jw.boardservice.file.FileEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -20,6 +21,9 @@ public class Board extends BaseTimeEntity
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToMany(mappedBy = "board")
+    private List<FileEntity> files = new ArrayList<>();
 
     private String title;
     private String content;
@@ -35,5 +39,10 @@ public class Board extends BaseTimeEntity
     public void increaseCount()
     {
         this.count = this.count + 1;
+    }
+
+    public void addFile(FileEntity fileEntity) {
+        files.add(fileEntity);
+        fileEntity.mapBoard(this);
     }
 }

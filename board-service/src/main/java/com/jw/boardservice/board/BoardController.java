@@ -1,4 +1,4 @@
-package com.jw.boardservice;
+package com.jw.boardservice.board;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,11 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
-import com.jw.boardservice.BoardDto.*;
+import com.jw.boardservice.board.BoardDto.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
-import java.io.File;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -26,14 +25,8 @@ public class BoardController
                                       @RequestPart(value = "files", required = false) List<MultipartFile> files) throws Exception
     {
         String email = (String)session.getAttribute("email");
-        Long id = boardService.write(email, requestDto);
 
-        for(MultipartFile file : files)
-        {
-            System.out.println(file.getOriginalFilename());
-            String str = System.nanoTime() + file.getOriginalFilename();
-            file.transferTo(new File(str));
-        }
+        Long id = boardService.write(email, requestDto, files);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(id);
     }

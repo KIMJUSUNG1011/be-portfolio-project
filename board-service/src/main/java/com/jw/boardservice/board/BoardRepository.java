@@ -1,4 +1,4 @@
-package com.jw.boardservice;
+package com.jw.boardservice.board;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

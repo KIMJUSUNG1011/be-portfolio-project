@@ -1,4 +1,4 @@
-package com.jw.boardservice;
+package com.jw.boardservice.board;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

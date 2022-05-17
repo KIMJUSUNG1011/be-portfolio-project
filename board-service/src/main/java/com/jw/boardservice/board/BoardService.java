@@ -1,10 +1,16 @@
-package com.jw.boardservice;
+package com.jw.boardservice.board;
 
+import com.jw.boardservice.file.FileDto.*;
+import com.jw.boardservice.file.FileEntity;
+import com.jw.boardservice.file.FileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import com.jw.boardservice.BoardDto.*;
+import com.jw.boardservice.board.BoardDto.*;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -13,10 +19,32 @@ import java.util.List;
 public class BoardService
 {
     private final BoardRepository boardRepository;
+    private final FileRepository fileRepository;
 
-    public Long write(String email, BoardWriteRequestDto requestDto)
+    public Long write(String email, BoardWriteRequestDto requestDto, List<MultipartFile> files) throws IOException
     {
         Board board = boardRepository.save(requestDto.toEntity(email));
+
+        System.out.println(
+                "files : " + board.getFiles()
+        );
+
+        for (MultipartFile file : files)
+        {
+            FileWriteRequestDto fileWriteRequestDto = new FileWriteRequestDto(
+                    System.nanoTime() + file.getOriginalFilename(),
+                    file.getOriginalFilename(),
+                    file.getSize()
+            );
+
+            file.transferTo(new File(fileWriteRequestDto.getName()));
+            FileEntity fileEntity = fileWriteRequestDto.toEntity(board);
+
+            board.addFile(fileEntity);
+
+            fileRepository.save(fileEntity);
+        }
+
         return board.getId();
     }
 
