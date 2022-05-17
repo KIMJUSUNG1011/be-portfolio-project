@@ -25,10 +25,6 @@ public class BoardService
     {
         Board board = boardRepository.save(requestDto.toEntity(email));
 
-        System.out.println(
-                "files : " + board.getFiles()
-        );
-
         for (MultipartFile file : files)
         {
             FileWriteRequestDto fileWriteRequestDto = new FileWriteRequestDto(
