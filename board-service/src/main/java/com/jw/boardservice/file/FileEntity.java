@@ -1,6 +1,5 @@
 package com.jw.boardservice.file;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jw.boardservice.board.Board;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

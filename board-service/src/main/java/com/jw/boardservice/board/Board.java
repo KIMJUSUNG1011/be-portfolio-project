@@ -28,7 +28,7 @@ public class Board extends BaseTimeEntity
     private List<FileEntity> files = new ArrayList<>();
 
     @Builder
-    public Board(Long id, String title, String content, String email)
+    public Board(String title, String content, String email)
     {
         this.title = title;
         this.content = content;
