@@ -2,6 +2,7 @@ package com.jw.boardservice.board;
 
 import com.jw.boardservice.file.FileDto.*;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -45,7 +46,7 @@ public class BoardDto
         }
     }
 
-    @Getter
+    @Data
     @NoArgsConstructor
     @AllArgsConstructor
     static class BoardReadResponseDto
@@ -57,5 +58,17 @@ public class BoardDto
         private int count;
         private LocalDateTime registerDate;
         private List<FileReadResponseDto> files;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    static class BoardListResponseDto
+    {
+        private Long id;
+        private String title;
+        private String email;
+        private int count;
+        private LocalDateTime registerDate;
     }
 }

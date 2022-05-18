@@ -2,7 +2,7 @@ package com.jw.boardservice.file;
 
 import com.jw.boardservice.board.Board;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,7 +27,7 @@ public class FileDto
         }
     }
 
-    @Getter
+    @Data
     @AllArgsConstructor
     @NoArgsConstructor
     public static class FileReadResponseDto

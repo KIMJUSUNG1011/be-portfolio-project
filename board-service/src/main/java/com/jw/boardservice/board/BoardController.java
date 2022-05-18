@@ -66,9 +66,9 @@ public class BoardController
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Board>> list()
+    public ResponseEntity<List<BoardListResponseDto>> list()
     {
-        List<Board> boardList = boardService.list();
+        List<BoardListResponseDto> boardList = boardService.list();
 
         if(boardList == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);

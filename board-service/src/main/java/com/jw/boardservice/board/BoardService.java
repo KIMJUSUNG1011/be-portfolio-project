@@ -1,11 +1,16 @@
 package com.jw.boardservice.board;
 
-import com.jw.boardservice.file.FileDto.*;
+import com.jw.boardservice.board.BoardDto.BoardEditRequestDto;
+import com.jw.boardservice.board.BoardDto.BoardListResponseDto;
+import com.jw.boardservice.board.BoardDto.BoardReadResponseDto;
+import com.jw.boardservice.board.BoardDto.BoardWriteRequestDto;
+import com.jw.boardservice.file.FileDto.FileReadResponseDto;
+import com.jw.boardservice.file.FileDto.FileWriteRequestDto;
 import com.jw.boardservice.file.FileEntity;
 import com.jw.boardservice.file.FileRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import com.jw.boardservice.board.BoardDto.*;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -70,9 +75,14 @@ public class BoardService
     }
 
     @Transactional(readOnly = true)
-    public List<Board> list()
+    public List<BoardListResponseDto> list()
     {
-        return boardRepository.findAll();
+        List<Board> boardList = boardRepository.findAll();
+        List<BoardListResponseDto> responseDtoList = new ArrayList<>();
+        for(Board board : boardList)
+            responseDtoList.add(new ModelMapper().map(board, BoardListResponseDto.class));
+
+        return responseDtoList;
     }
 
     private void uploadFiles(Board board, List<MultipartFile> files) throws Exception
@@ -97,28 +107,15 @@ public class BoardService
 
     private BoardReadResponseDto attachFilesToBoard(Board board)
     {
-        List<FileEntity> files = board.getFiles();
-        List<FileReadResponseDto> responseFiles = new ArrayList<>();
-
         String location = System.getProperty("java.io.tmpdir");
 
-        for (FileEntity f : files) {
-            Path path = Paths.get(location, f.getPath());
-            responseFiles.add(new FileReadResponseDto(
-                    f.getName(), path.toString(), f.getSize()
-            ));
+        BoardReadResponseDto responseDto = new ModelMapper().map(board, BoardReadResponseDto.class);
+        for(FileReadResponseDto dto : responseDto.getFiles())
+        {
+            Path path = Paths.get(location, dto.getPath());
+            dto.setPath(path.toString());
         }
 
-        BoardReadResponseDto readResponseDto = new BoardReadResponseDto(
-                board.getId(),
-                board.getTitle(),
-                board.getContent(),
-                board.getEmail(),
-                board.getCount(),
-                board.getRegisterDate(),
-                responseFiles
-        );
-
-        return readResponseDto;
+        return responseDto;
     }
 }

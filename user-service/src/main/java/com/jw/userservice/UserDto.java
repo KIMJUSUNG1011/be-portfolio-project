@@ -37,7 +37,10 @@ public class UserDto
 
         public UserEntity toEntity()
         {
-            return UserEntity.builder().email(email).password(password).build();
+            return UserEntity.builder()
+                    .email(email)
+                    .password(password)
+                    .build();
         }
     }
 
@@ -72,19 +75,12 @@ public class UserDto
 
     @Getter
     @NoArgsConstructor
-    public static class UserResponseDto
+    @AllArgsConstructor
+    public static class UserTokenDto
     {
         private String email;
         private String password;
         private String name;
         private String phone;
-
-        public UserResponseDto(UserEntity entity)
-        {
-            email = entity.getEmail();
-            password = entity.getPassword();
-            name = entity.getName();
-            phone = entity.getPhone();
-        }
     }
 }
