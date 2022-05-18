@@ -17,7 +17,6 @@ public class UserController
     public ResponseEntity<String> register(@RequestBody UserRegisterRequestDto requestDto)
     {
         String email = userService.register(requestDto);
-        System.out.println(email);
         return ResponseEntity.status(HttpStatus.CREATED).body(email);
     }
 
