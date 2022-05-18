@@ -9,8 +9,8 @@
 | method  | uri  | description  | return | success | fail |
 |:----------|:----------|:----------|:-------|:-----------|:-----------|
 | post    | /register    | 회원가입   | String | CREATED |  |
-| post    | /login    | 로그인    | Boolean | OK | |
-| post    | /logout    | 로그아웃    | Boolean | OK | NOT_FOUND |
+| post    | /login    | 로그인    | | | |
+| post    | /logout    | 로그아웃    | | | |
 | put    | /update    | 회원정보수정    | Boolean | CREATED | NOT_FOUND  |
 | delete | /withdraw    | 회원탈퇴    | Boolean | OK | NOT_FOUND |
 
