@@ -21,37 +21,16 @@ public class UserController
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Boolean> update(@RequestBody UserUpdateRequestDto requestDto)
+    public ResponseEntity<Boolean> update(@RequestHeader String email, @RequestBody UserUpdateRequestDto requestDto)
     {
-        Boolean result = userService.update(requestDto);
+        Boolean result = userService.update(email, requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @DeleteMapping("/withdraw")
-    public ResponseEntity<Boolean> withdraw(@RequestBody UserWithdrawRequestDto requestDto)
+    public ResponseEntity<Boolean> withdraw(@RequestHeader String email)
     {
-        Boolean result = userService.withdraw(requestDto);
+        Boolean result = userService.withdraw(email);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
-
-/*
-    @PostMapping("/login")
-    public ResponseEntity<Boolean> login(@RequestBody UserLoginRequestDto requestDto)
-    {
-        Boolean result = userService.login(requestDto);
-
-        return ResponseEntity.status(HttpStatus.OK).body(result);
-    }
-
-    @PostMapping("/logout")
-    public ResponseEntity<Boolean> logout(HttpSession session)
-    {
-        Object ret = session.getAttribute("email");
-        if(ret == null)
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
-
-        session.removeAttribute("email");
-        return ResponseEntity.status(HttpStatus.OK).body(true);
-    }
-*/
 }

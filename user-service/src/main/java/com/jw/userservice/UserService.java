@@ -26,8 +26,8 @@ public class UserService implements UserDetailsService {
         return user.getEmail();
     }
 
-    public Boolean update(UserUpdateRequestDto requestDto) {
-        UserEntity user = userRepository.findByEmail(requestDto.getEmail()).orElse(null);
+    public Boolean update(String email, UserUpdateRequestDto requestDto) {
+        UserEntity user = userRepository.findByEmail(email).orElse(null);
         if (user == null)
             return false;
 
@@ -37,8 +37,8 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
-    public Boolean withdraw(UserWithdrawRequestDto requestDto) {
-        UserEntity user = userRepository.findByEmail(requestDto.getEmail()).orElse(null);
+    public Boolean withdraw(String email) {
+        UserEntity user = userRepository.findByEmail(email).orElse(null);
         if (user == null)
             return false;
 

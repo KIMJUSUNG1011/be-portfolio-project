@@ -49,12 +49,12 @@ class UserEntityServiceTest
         // given
         UserRegisterRequestDto userRegisterRequestDto = new UserRegisterRequestDto("email", "12345", "이름", "01012345678");
         userService.register(userRegisterRequestDto);
-        UserUpdateRequestDto requestDto1 = new UserUpdateRequestDto("email", "54321", "name", "01098765432");
-        UserUpdateRequestDto requestDto2 = new UserUpdateRequestDto("email2", "54321", "name", "01098765432");
+        UserUpdateRequestDto requestDto1 = new UserUpdateRequestDto("54321", "name", "01098765432");
+        UserUpdateRequestDto requestDto2 = new UserUpdateRequestDto("54321", "name", "01098765432");
 
         // when
-        Boolean result1 = userService.update(requestDto1);
-        Boolean result2 = userService.update(requestDto2);
+        Boolean result1 = userService.update("email", requestDto1);
+        Boolean result2 = userService.update("email", requestDto2);
 
         // then
         Assertions.assertThat(result1).isEqualTo(true);
@@ -67,12 +67,12 @@ class UserEntityServiceTest
         // given
         UserRegisterRequestDto userRegisterRequestDto = new UserRegisterRequestDto("email", "12345", "이름", "01012345678");
         userService.register(userRegisterRequestDto);
-        UserWithdrawRequestDto requestDto1 = new UserWithdrawRequestDto("email");
-        UserWithdrawRequestDto requestDto2 = new UserWithdrawRequestDto("email2");
+        String email1 = "email1";
+        String email2 = "email2";
 
         // when
-        Boolean result1 = userService.withdraw(requestDto1);
-        Boolean result2 = userService.withdraw(requestDto2);
+        Boolean result1 = userService.withdraw(email1);
+        Boolean result2 = userService.withdraw(email2);
 
         // then
         Assertions.assertThat(result1).isEqualTo(true);

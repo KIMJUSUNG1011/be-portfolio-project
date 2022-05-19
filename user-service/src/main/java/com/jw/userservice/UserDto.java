@@ -1,8 +1,6 @@
 package com.jw.userservice;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 public class UserDto
 {
@@ -49,7 +47,6 @@ public class UserDto
     @AllArgsConstructor
     public static class UserUpdateRequestDto
     {
-        private String email;
         private String password;
         private String name;
         private String phone;
@@ -57,7 +54,6 @@ public class UserDto
         public UserEntity toEntity(String encodedPassword)
         {
             return UserEntity.builder()
-                    .email(email)
                     .password(encodedPassword)
                     .name(name)
                     .phone(phone)
@@ -65,15 +61,7 @@ public class UserDto
         }
     }
 
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class UserWithdrawRequestDto
-    {
-        private String email;
-    }
-
-    @Getter
+    @Data
     @NoArgsConstructor
     @AllArgsConstructor
     public static class UserTokenDto

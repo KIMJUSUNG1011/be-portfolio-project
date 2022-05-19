@@ -32,7 +32,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
                 .and()
                     .authorizeRequests()
                         .antMatchers("/register/**", "/h2-console/**").permitAll()
-                .anyRequest().authenticated()
                 .and()
                     .antMatcher("/**").addFilter(getAuthenticationFilter());
 
