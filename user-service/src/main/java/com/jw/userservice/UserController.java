@@ -17,6 +17,11 @@ public class UserController
     public ResponseEntity<String> register(@RequestBody UserRegisterRequestDto requestDto)
     {
         String email = userService.register(requestDto);
+
+        if (email == null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        }
+
         return ResponseEntity.status(HttpStatus.CREATED).body(email);
     }
 

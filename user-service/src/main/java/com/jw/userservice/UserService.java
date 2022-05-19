@@ -22,6 +22,11 @@ public class UserService implements UserDetailsService {
 
     public String register(UserRegisterRequestDto requestDto) {
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
+
+        if (checkDuplicateUser(requestDto.getEmail())) {
+            return null;
+        }
+
         UserEntity user = userRepository.save(requestDto.toEntity(encodedPassword));
         return user.getEmail();
     }
@@ -51,6 +56,11 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(email).orElse(null);
     }
 
+    public boolean checkDuplicateUser(String email) {
+        UserEntity userEntity = userRepository.findByEmail(email).orElse(null);
+        return userEntity != null;
+    }
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserEntity user = userRepository.findByEmail(email).orElse(null);
@@ -59,4 +69,5 @@ public class UserService implements UserDetailsService {
 
         return new User(user.getEmail(), user.getPassword(), new ArrayList<>());
     }
+
 }
