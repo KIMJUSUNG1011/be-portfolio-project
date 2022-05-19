@@ -59,16 +59,4 @@ public class UserService implements UserDetailsService {
 
         return new User(user.getEmail(), user.getPassword(), new ArrayList<>());
     }
-
-/*
-    public Boolean login(UserLoginRequestDto requestDto)
-    {
-        User user = userRepository.findByEmail(requestDto.getEmail()).orElse(null);
-
-        if (user == null)
-            return false;
-
-        return passwordEncoder.matches(requestDto.getPassword(), user.getPassword());
-    }
-*/
 }

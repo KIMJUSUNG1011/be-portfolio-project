@@ -2,25 +2,55 @@ server:
   port: 8000
 
 spring:
+  # config server 정보
+  config:
+    import: "optional:configserver:http://localhost:8888/"
   application:
     name: apigateway-service
   cloud:
+    config:
+      name: config
+      profile: dev
     gateway:
       routes:
+        # 회원 가입
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/write
+            - Method=POST
+          filters:
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+        # 로그인
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/login
+            - Method=POST
+          filters:
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
             - Path=/user-service/**
           filters:
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
         - id: board-service
           uri: lb://BOARD-SERVICE
           predicates:
             - Path=/board-service/**
           filters:
             - RewritePath=/board-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
+  management:
+    endpoints:
+      web:
+        exposure:
+          include:
+  main:
+    web-application-type=reactive:eureka:
 
-eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
