@@ -57,3 +57,6 @@ spring:
     service-url:
       defaultZone: http://localhost:8761/eureka
 
+  session:
+    store-type: redis
+
