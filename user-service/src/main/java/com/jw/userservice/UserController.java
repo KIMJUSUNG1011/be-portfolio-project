@@ -5,7 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.jw.userservice.UserDto.*;
+import java.security.Principal;
+
+import static com.jw.userservice.UserDto.UserRegisterRequestDto;
+import static com.jw.userservice.UserDto.UserUpdateRequestDto;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,16 +29,16 @@ public class UserController
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Boolean> update(@RequestHeader String email, @RequestBody UserUpdateRequestDto requestDto)
+    public ResponseEntity<Boolean> update(Principal principal, @RequestBody UserUpdateRequestDto requestDto)
     {
-        Boolean result = userService.update(email, requestDto);
+        Boolean result = userService.update(principal.getName(), requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @DeleteMapping("/withdraw")
-    public ResponseEntity<Boolean> withdraw(@RequestHeader String email)
+    public ResponseEntity<Boolean> withdraw(Principal principal)
     {
-        Boolean result = userService.withdraw(email);
+        Boolean result = userService.withdraw(principal.getName());
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }
