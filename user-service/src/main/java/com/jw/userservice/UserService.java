@@ -1,11 +1,9 @@
 package com.jw.userservice;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -48,7 +46,6 @@ public class UserService implements UserDetailsService {
 
     public Boolean withdraw(String email, String rawPassword) {
 
-
         UserEntity user = userRepository.findByEmail(email).orElse(null);
         if (user == null)
             return false;
@@ -73,7 +70,7 @@ public class UserService implements UserDetailsService {
 
         UserEntityDto dto = new ModelMapper().map(userEntity, UserEntityDto.class);
         ArrayList<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        authorities.add(new SimpleGrantedAuthority("USER"));
         dto.setAuthorities(authorities);
 
         return dto;
