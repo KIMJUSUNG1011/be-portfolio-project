@@ -71,8 +71,8 @@ class UserEntityServiceTest
         String email2 = "email2";
 
         // when
-        Boolean result1 = userService.withdraw(email1);
-        Boolean result2 = userService.withdraw(email2);
+        Boolean result1 = userService.withdraw(email1, "12345");
+        Boolean result2 = userService.withdraw(email2, "12345");
 
         // then
         Assertions.assertThat(result1).isEqualTo(true);

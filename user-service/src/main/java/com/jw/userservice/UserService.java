@@ -42,9 +42,14 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
-    public Boolean withdraw(String email) {
+    public Boolean withdraw(String email, String rawPassword) {
+
+
         UserEntity user = userRepository.findByEmail(email).orElse(null);
         if (user == null)
+            return false;
+
+        if (!passwordEncoder.matches(rawPassword, user.getPassword()))
             return false;
 
         userRepository.delete(user);

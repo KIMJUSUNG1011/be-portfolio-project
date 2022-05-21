@@ -1,13 +1,14 @@
 package com.jw.userservice;
 
-import com.jw.userservice.config.RedisConfiguration;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Map;
 
 import static com.jw.userservice.UserDto.UserRegisterRequestDto;
 import static com.jw.userservice.UserDto.UserUpdateRequestDto;
@@ -38,9 +39,18 @@ public class UserController
     }
 
     @DeleteMapping("/withdraw")
-    public ResponseEntity<Boolean> withdraw(Principal principal)
+    public ResponseEntity<Boolean> withdraw(Principal principal, @RequestBody Map<String, String> map)
     {
-        Boolean result = userService.withdraw(principal.getName());
-        return ResponseEntity.status(HttpStatus.OK).body(result);
+        String rawPassword = map.get("password");
+
+        Boolean result = userService.withdraw(principal.getName(), rawPassword);
+
+        if (!result)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+
+        // remove session
+        SecurityContextHolder.clearContext();
+
+        return ResponseEntity.status(HttpStatus.OK).body(true);
     }
 }
