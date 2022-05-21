@@ -28,9 +28,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
                     .logout()
                 .and()
                     .authorizeRequests()
-                        .antMatchers("/register/**", "/h2-console/**").permitAll()
-                .antMatchers("/withdraw/**").hasRole("ADMIN")
-                .antMatchers("/update/**").hasRole("USER");
+                        .antMatchers("/register/**", "/h2-console/**").permitAll();
 
         httpSecurity.headers().frameOptions().disable();
     }
