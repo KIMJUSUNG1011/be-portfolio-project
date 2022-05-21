@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -25,6 +22,9 @@ public class UserEntity extends BaseTimeEntity
     private String password;
     private String name;
     private String phone;
+
+    @Enumerated(EnumType.STRING)
+    private Role role = Role.MEMBER;
 
     public void update(UserEntity userEntity)
     {

@@ -1,6 +1,9 @@
 package com.jw.userservice;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -63,11 +66,13 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        UserEntity user = userRepository.findByEmail(email).orElse(null);
-        if (user == null)
+        UserEntity userEntity = userRepository.findByEmail(email).orElse(null);
+        if (userEntity == null)
             throw new UsernameNotFoundException(email);
 
-        return new User(user.getEmail(), user.getPassword(), new ArrayList<>());
-    }
+        UserEntityDto dto = new ModelMapper().map(userEntity, UserEntityDto.class);
+        ArrayList<GrantedAuthority> list = new ArrayList<>();
 
+        return dto;
+    }
 }

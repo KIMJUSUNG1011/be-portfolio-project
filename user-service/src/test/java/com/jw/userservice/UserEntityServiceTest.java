@@ -1,20 +1,18 @@
 package com.jw.userservice;
 
-import com.jw.userservice.UserDto.UserLoginRequestDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.jw.userservice.UserDto.*;
 import static com.jw.userservice.UserDto.UserRegisterRequestDto;
+import static com.jw.userservice.UserDto.UserUpdateRequestDto;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -26,9 +24,6 @@ class UserEntityServiceTest
 
     @Autowired
     RedisTemplate<String, Object> redisTemplate;
-
-    MockHttpSession session;
-    MockHttpServletRequest request;
 
     @Test
     void register()
