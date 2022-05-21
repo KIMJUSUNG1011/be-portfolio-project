@@ -23,9 +23,6 @@ public class UserEntity extends BaseTimeEntity
     private String name;
     private String phone;
 
-    @Enumerated(EnumType.STRING)
-    private Role role = Role.MEMBER;
-
     public void update(UserEntity userEntity)
     {
         password = userEntity.password;

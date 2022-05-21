@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -71,7 +72,9 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException(email);
 
         UserEntityDto dto = new ModelMapper().map(userEntity, UserEntityDto.class);
-        ArrayList<GrantedAuthority> list = new ArrayList<>();
+        ArrayList<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        dto.setAuthorities(authorities);
 
         return dto;
     }
