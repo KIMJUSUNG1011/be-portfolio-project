@@ -29,34 +29,30 @@ spring:
             - Method=POST
           filters:
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+            - SaveSession
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
             - Path=/user-service/**
           filters:
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
-            - AuthorizationHeaderFilter
         - id: board-service
           uri: lb://BOARD-SERVICE
           predicates:
             - Path=/board-service/**
           filters:
             - RewritePath=/board-service/(?<segment>.*), /$\{segment}
-            - AuthorizationHeaderFilter
   management:
     endpoints:
       web:
         exposure:
           include:
-  main:
-    web-application-type=reactive:eureka:
-
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
       defaultZone: http://localhost:8761/eureka
 
-  session:
-    store-type: redis
-
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor

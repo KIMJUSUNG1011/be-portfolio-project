@@ -51,11 +51,6 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
-    public UserEntity findByEmail(String email)
-    {
-        return userRepository.findByEmail(email).orElse(null);
-    }
-
     public boolean checkDuplicateUser(String email) {
         UserEntity userEntity = userRepository.findByEmail(email).orElse(null);
         return userEntity != null;
