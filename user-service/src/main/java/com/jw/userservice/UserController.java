@@ -23,18 +23,21 @@ public class UserController
     {
         String email = userService.register(requestDto);
 
-        if (email == null) {
+        if (email == null)
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
-        }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(email);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Boolean> update(Principal principal, @RequestBody UserUpdateRequestDto requestDto)
+    public ResponseEntity<String> update(Principal principal, @RequestBody UserUpdateRequestDto requestDto)
     {
         Boolean result = userService.update(principal.getName(), requestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(result);
+
+        if (!result)
+            return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body("사용자 정보 없데이트에 실패했습니다.");
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("사용자 정보가 업데이트 되었습니다.");
     }
 
     @DeleteMapping("/withdraw")
