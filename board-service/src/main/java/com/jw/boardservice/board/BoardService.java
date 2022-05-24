@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.Cookie;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -65,13 +66,19 @@ public class BoardService
     }
 
     @Transactional(readOnly = true)
-    public BoardReadResponseDto read(Long id)
+    public BoardReadResponseDto read(Cookie cookie, Long id)
     {
         Board board = boardRepository.findById(id).orElse(null);
+        if(board == null)
+            return null;
 
-        BoardReadResponseDto readResponseDto = attachFilesToBoard(board);
+        if(cookie != null)
+            board.increaseViewCount();
 
-        return readResponseDto;
+        BoardReadResponseDto responseDto = new ModelMapper().map(board, BoardReadResponseDto.class);
+        attachFilesToBoard(responseDto);
+
+        return responseDto;
     }
 
     @Transactional(readOnly = true)
@@ -105,17 +112,14 @@ public class BoardService
         }
     }
 
-    private BoardReadResponseDto attachFilesToBoard(Board board)
+    private void attachFilesToBoard(BoardReadResponseDto responseDto)
     {
         String location = System.getProperty("java.io.tmpdir");
 
-        BoardReadResponseDto responseDto = new ModelMapper().map(board, BoardReadResponseDto.class);
         for(FileReadResponseDto dto : responseDto.getFiles())
         {
             Path path = Paths.get(location, dto.getPath());
             dto.setPath(path.toString());
         }
-
-        return responseDto;
     }
 }

@@ -1,14 +1,20 @@
 package com.jw.boardservice.board;
 
+import com.jw.boardservice.board.BoardDto.BoardEditRequestDto;
+import com.jw.boardservice.board.BoardDto.BoardListResponseDto;
+import com.jw.boardservice.board.BoardDto.BoardReadResponseDto;
+import com.jw.boardservice.board.BoardDto.BoardWriteRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
-import com.jw.boardservice.board.BoardDto.*;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 import java.util.List;
 
@@ -52,12 +58,16 @@ public class BoardController
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BoardReadResponseDto> read(@PathVariable("id") Long id)
+    public ResponseEntity<BoardReadResponseDto> read(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") Long id)
     {
-        BoardReadResponseDto readResponseDto = boardService.read(id);
+        Cookie cookie = hasLatestViewCookie(request.getCookies(), String.valueOf(id));
+        BoardReadResponseDto readResponseDto = boardService.read(cookie, id);
 
         if(readResponseDto == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+
+        if(cookie != null)
+            response.addCookie(cookie);
 
         return ResponseEntity.status(HttpStatus.OK).body(readResponseDto);
     }
@@ -71,5 +81,24 @@ public class BoardController
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 
         return ResponseEntity.status(HttpStatus.OK).body(boardList);
+    }
+
+    private Cookie hasLatestViewCookie(Cookie[] cookies, String id)
+    {
+        final String name = "latestView";
+
+        for(Cookie cookie : cookies)
+        {
+            if(!cookie.getName().equals(name))
+                continue;
+
+            // 가장 최근 읽은 글일 때
+            if(cookie.getValue().equals(id))
+                return null;
+
+            break;
+        }
+
+        return new Cookie(name, id);
     }
 }
