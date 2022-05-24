@@ -73,6 +73,7 @@ public class UserService implements UserDetailsService {
         authorities.add(new SimpleGrantedAuthority("USER"));
         dto.setAuthorities(authorities);
 
-        return dto;
+        return new User(userEntity.getEmail(), userEntity.getPassword(), authorities);
+//        return dto;
     }
 }
