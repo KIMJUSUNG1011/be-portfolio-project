@@ -11,7 +11,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.session.web.context.AbstractHttpSessionApplicationInitializer;
 
-@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 10)
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 100)
 @Configuration
 public class RedisConfiguration extends AbstractHttpSessionApplicationInitializer
 {
