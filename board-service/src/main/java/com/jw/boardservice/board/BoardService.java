@@ -65,7 +65,6 @@ public class BoardService
         return true;
     }
 
-    @Transactional(readOnly = true)
     public BoardReadResponseDto read(Cookie cookie, Long id)
     {
         Board board = boardRepository.findById(id).orElse(null);
