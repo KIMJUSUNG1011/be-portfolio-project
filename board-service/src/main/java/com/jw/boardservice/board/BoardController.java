@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import com.jw.boardservice.board.BoardDto.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.List;
 
@@ -31,10 +30,9 @@ public class BoardController
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Long> edit(HttpSession session, @PathVariable("id") Long id, @RequestBody BoardEditRequestDto requestDto)
+    public ResponseEntity<Long> edit(Principal principal, @PathVariable("id") Long id, @RequestBody BoardEditRequestDto requestDto)
     {
-        String email = (String)session.getAttribute("email");
-        Boolean result = boardService.edit(id, email, requestDto);
+        Boolean result = boardService.edit(id, principal.getName(), requestDto);
 
         if (result)
             return ResponseEntity.status(HttpStatus.CREATED).body(id);
@@ -43,7 +41,7 @@ public class BoardController
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> delete(HttpSession session, @PathVariable("id") Long id)
+    public ResponseEntity<Boolean> delete(@PathVariable("id") Long id)
     {
         Boolean result = boardService.delete(id);
 

@@ -3,8 +3,6 @@ package com.jw.userservice.config;
 import com.jw.userservice.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -28,17 +26,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
         httpSecurity
                 .formLogin().usernameParameter("email")
                 .and()
-                    .logout()
+                .logout()
                 .and()
-                    .authorizeRequests()
-                        .antMatchers("/register/**", "/h2-console/**").permitAll();
-
-//        httpSecurity.sessionManagement().invalidSessionStrategy((request, response) -> {
-//
-//        });
+                .authorizeRequests()
+                .antMatchers("/h2-console/**", "/register/**", "/login/**").permitAll()
+                .anyRequest().authenticated();
 
         httpSecurity.headers().frameOptions().disable();
-    }
+    };
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception

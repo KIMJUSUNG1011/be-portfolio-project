@@ -13,23 +13,6 @@ spring:
       profile: dev
     gateway:
       routes:
-        # 회원 가입
-        - id: user-service
-          uri: lb://USER-SERVICE
-          predicates:
-            - Path=/user-service/register
-            - Method=POST
-          filters:
-            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
-        # 로그인
-        - id: user-service
-          uri: lb://USER-SERVICE
-          predicates:
-            - Path=/user-service/login/**
-            - Method=POST
-          filters:
-            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
-            - SaveSession
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
