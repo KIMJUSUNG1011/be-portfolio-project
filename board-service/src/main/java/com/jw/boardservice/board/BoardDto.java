@@ -14,7 +14,7 @@ public class BoardDto
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    static class BoardWriteRequestDto
+    public static class BoardWriteRequestDto
     {
         private String title;
         private String content;
@@ -32,7 +32,7 @@ public class BoardDto
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    static class BoardEditRequestDto
+    public static class BoardEditRequestDto
     {
         private String title;
         private String content;
@@ -49,7 +49,7 @@ public class BoardDto
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    static class BoardReadResponseDto
+    public static class BoardReadResponseDto
     {
         private Long id;
         private String title;
@@ -63,7 +63,7 @@ public class BoardDto
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    static class BoardListResponseDto
+    public static class BoardListResponseDto
     {
         private Long id;
         private String title;

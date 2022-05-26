@@ -1,21 +1,24 @@
 package com.jw.boardservice;
 
 import com.jw.boardservice.board.Board;
-import com.jw.boardservice.board.BoardDto;
 import com.jw.boardservice.board.BoardRepository;
 import com.jw.boardservice.board.BoardService;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.Cookie;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.jw.boardservice.board.BoardDto.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,89 +30,110 @@ class BoardServiceTest
     @InjectMocks
     BoardService boardService;
 
-//    void write()
-//    {
-//        // given
-//        String title = "제목1";
-//        String content = "내용1";
-//        String email = "dlrtls12345@naver.com";
-//
-//        Board board = new Board(1L, title, content, email, 0);
-//
-//        // mocking
-//        when(boardRepository.save(any())).thenReturn(board);
-//
-//        BoardWriteRequestDto requestDto = new BoardWriteRequestDto(title, content);
-//
-//        // when
-//        Long id = boardService.write(email, requestDto);
-//
-//        assertThat(id).isEqualTo(board.getId());
-//    }
-//
-//    @Test
-//    void edit()
-//    {
-//        Long id = 1L;
-//        String title = "제목2";
-//        String content = "내용2";
-//        String email = "dlrtls12345@naver.com";
-//
-//        Board board = new Board(1L, title, content, email, 0);
-//
-//        when(boardRepository.findById(1L)).thenReturn(Optional.of(board));
-//
-//        BoardDto.BoardEditRequestDto requestDto = new BoardEditRequestDto(title, content);
-//
-//        Boolean result = boardService.edit(id, email, requestDto);
-//
-//        assertThat(result).isEqualTo(true);
-//    }
-//
-//    @Test
-//    void delete()
-//    {
-//        Board board = new Board(1L, "title", "content", "email", 0);
-//        when(boardRepository.findById(board.getId())).thenReturn(Optional.of(board));
-//
-//        // when
-//        Boolean result = boardService.delete(board.getId());
-//
-//        // then
-//        assertThat(result).isEqualTo(true);
-//    }
-//
-//    @Test
-//    void read()
-//    {
-//        // given
-//        Board board = new Board(1L, "title", "content", "email", 0);
-//        when(boardRepository.findById(board.getId())).thenReturn(Optional.of(board));
-//
-//        // when
-//        Board findOne = boardService.read(board.getId());
-//
-//        // then
-//        assertThat(findOne.getId()).isEqualTo(board.getId());
-//    }
-//
-//    @Test
-//    void list()
-//    {
-//        // given
-//        Board board1 = new Board(1L, "title", "content", "email", 0);
-//        Board board2 = new Board(2L, "title", "content", "email", 0);
-//        ArrayList<Board> list = new ArrayList<>();
-//        list.add(board1);
-//        list.add(board2);
-//
-//        when(boardRepository.findAll()).thenReturn(list);
-//
-//        // when
-//        List<Board> findList = boardService.list();
-//
-//        // then
-//        assertThat(findList.get(0)).isEqualTo(board1);
-//        assertThat(findList.get(1)).isEqualTo(board2);
-//    }
+    @Test
+    @DisplayName("글 작성 테스트")
+    void write() throws Exception
+    {
+        // given
+        BoardWriteRequestDto boardWriteRequestDto= mock(BoardWriteRequestDto.class);
+        Board board = new Board("제목", "내용", "이메일");
+        List<MultipartFile> files = new ArrayList<>();
+        when(boardRepository.save(board)).thenReturn(board);
+        when(boardWriteRequestDto.toEntity("이메일")).thenReturn(board);
+
+        // when
+        Long id = boardService.write("이메일", boardWriteRequestDto, files);
+
+        // then
+        assertThat(id).isEqualTo(board.getId());
+    }
+
+    @Test
+    @DisplayName("글 수정 테스트")
+    void edit()
+    {
+        // given
+        Board board = new Board("제목", "내용", "이메일");
+        BoardEditRequestDto requestDto = new BoardEditRequestDto("제목", "내용");
+        when(boardRepository.findById(board.getId())).thenReturn(Optional.of(board));
+
+        // when
+        Boolean result = boardService.edit(board.getId(), "이메일", requestDto);
+        Boolean result2 = boardService.edit(100L, "이메일", requestDto);
+
+        // then
+        assertThat(result).isEqualTo(true);
+        assertThat(result2).isEqualTo(false);
+    }
+
+    @Test
+    @DisplayName("글 삭제 테스트")
+    void delete()
+    {
+        Board board = new Board("title", "content", "email");
+        when(boardRepository.findById(board.getId())).thenReturn(Optional.of(board));
+
+        // when
+        Boolean result = boardService.delete(board.getId());
+        Boolean result2 = boardService.delete(100L);
+
+        // then
+        assertThat(result).isEqualTo(true);
+        assertThat(result2).isEqualTo(false);
+    }
+
+    @Test
+    @DisplayName("쿠키가 없을 때 글 조회 테스트")
+    void read()
+    {
+        // given
+        Board board = new Board("title", "content", "email");
+        when(boardRepository.findById(board.getId())).thenReturn(Optional.of(board));
+
+        // when
+        BoardReadResponseDto readResponseDto = boardService.read(null, board.getId());
+
+        // then
+        assertThat(readResponseDto.getId()).isEqualTo(board.getId());
+        assertThat(readResponseDto.getCount()).isEqualTo(0);
+    }
+
+    @Test
+    @DisplayName("쿠키가 있을 때 글 조회 테스트")
+    void readWithCookie()
+    {
+        // given
+        Board board = new Board("title", "content", "email");
+        when(boardRepository.findById(board.getId())).thenReturn(Optional.of(board));
+        Cookie cookie = new Cookie("latestView", String.valueOf(board.getId()));
+
+        // when
+        BoardReadResponseDto responseDto = boardService.read(cookie, board.getId());
+
+        // then
+        assertThat(responseDto.getId()).isEqualTo(board.getId());
+        assertThat(responseDto.getCount()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("글 목록 테스트")
+    void list()
+    {
+        // given
+        Board board1 = new Board("title", "content", "email");
+        Board board2 = new Board("title2", "content2", "email2");
+        ArrayList<Board> list = new ArrayList<>();
+        list.add(board1);
+        list.add(board2);
+
+        when(boardRepository.findAll()).thenReturn(list);
+
+        // when
+        List<BoardListResponseDto> findList = boardService.list();
+
+        // then
+        assertThat(findList.get(0).getTitle()).isEqualTo(board1.getTitle());
+        assertThat(findList.get(1).getTitle()).isNotEqualTo(board1.getTitle());
+        assertThat(findList.get(1).getTitle()).isEqualTo(board2.getTitle());
+    }
 }
