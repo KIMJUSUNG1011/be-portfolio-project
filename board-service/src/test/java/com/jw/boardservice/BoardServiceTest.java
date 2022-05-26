@@ -18,7 +18,7 @@ import java.util.Optional;
 
 import static com.jw.boardservice.board.BoardDto.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,11 +35,12 @@ class BoardServiceTest
     void write() throws Exception
     {
         // given
-        BoardWriteRequestDto boardWriteRequestDto= mock(BoardWriteRequestDto.class);
+        BoardWriteRequestDto boardWriteRequestDto = new BoardWriteRequestDto("제목", "내용");
         Board board = new Board("제목", "내용", "이메일");
         List<MultipartFile> files = new ArrayList<>();
-        when(boardRepository.save(board)).thenReturn(board);
-        when(boardWriteRequestDto.toEntity("이메일")).thenReturn(board);
+
+        // mocking
+        when(boardRepository.save(any())).thenReturn(board);
 
         // when
         Long id = boardService.write("이메일", boardWriteRequestDto, files);
@@ -55,6 +56,8 @@ class BoardServiceTest
         // given
         Board board = new Board("제목", "내용", "이메일");
         BoardEditRequestDto requestDto = new BoardEditRequestDto("제목", "내용");
+
+        // mocking
         when(boardRepository.findById(board.getId())).thenReturn(Optional.of(board));
 
         // when
@@ -71,6 +74,8 @@ class BoardServiceTest
     void delete()
     {
         Board board = new Board("title", "content", "email");
+
+        // mocking
         when(boardRepository.findById(board.getId())).thenReturn(Optional.of(board));
 
         // when
@@ -88,6 +93,8 @@ class BoardServiceTest
     {
         // given
         Board board = new Board("title", "content", "email");
+
+        // mocking
         when(boardRepository.findById(board.getId())).thenReturn(Optional.of(board));
 
         // when
@@ -104,8 +111,10 @@ class BoardServiceTest
     {
         // given
         Board board = new Board("title", "content", "email");
-        when(boardRepository.findById(board.getId())).thenReturn(Optional.of(board));
         Cookie cookie = new Cookie("latestView", String.valueOf(board.getId()));
+
+        // mocking
+        when(boardRepository.findById(board.getId())).thenReturn(Optional.of(board));
 
         // when
         BoardReadResponseDto responseDto = boardService.read(cookie, board.getId());
