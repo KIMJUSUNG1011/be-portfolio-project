@@ -12,7 +12,7 @@ import java.util.Collection;
 
 public class UserDto
 {
-    @Getter
+    @Data
     @NoArgsConstructor
     @AllArgsConstructor
     public static class UserRegisterRequestDto
@@ -33,7 +33,7 @@ public class UserDto
         }
     }
 
-    @Getter
+    @Data
     @NoArgsConstructor
     @AllArgsConstructor
     public static class UserUpdateRequestDto

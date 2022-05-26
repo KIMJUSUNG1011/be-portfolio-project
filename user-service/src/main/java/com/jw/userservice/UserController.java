@@ -21,12 +21,12 @@ public class UserController
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody UserRegisterRequestDto requestDto)
     {
-        String email = userService.register(requestDto);
+        Long id = userService.register(requestDto);
 
-        if (email == null)
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        if (id == null)
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 존재하는 회원입니다.");
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(email);
+        return ResponseEntity.status(HttpStatus.CREATED).body("회원 가입에 성공하였습니다.");
     }
 
     @PutMapping("/update")
