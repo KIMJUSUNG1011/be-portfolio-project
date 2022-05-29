@@ -22,29 +22,29 @@ public class CommentController
 
     @PostMapping("/{board_id}/comment")
     public ResponseEntity<String> write(Principal principal,
-                                        @PathVariable("board_id") Long board_id,
+                                        @PathVariable("board_id") Long boardId,
                                         @RequestBody CommentWriteRequestDto requestDto)
     {
-        Long comment_id = commentService.write(board_id, principal.getName(), requestDto);
+        Long commentId = commentService.write(boardId, principal.getName(), requestDto);
 
-        if (comment_id == null)
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(comment_id + "번 댓글 생성에 실패했습니다.");
+        if (commentId == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(comment_id + "번 댓글 생성에 성공했습니다.");
+        return ResponseEntity.status(HttpStatus.CREATED).body(commentId + "번 댓글 생성에 성공했습니다.");
     }
 
     @PostMapping("/{board_id}/{comment_id}/comment")
     public ResponseEntity<String> write(Principal principal,
-                                        @PathVariable("board_id") Long board_id,
-                                        @PathVariable("comment_id") Long comment_id,
+                                        @PathVariable("board_id") Long boardId,
+                                        @PathVariable("comment_id") Long commentId,
                                         @RequestBody CommentWriteRequestDto requestDto)
     {
-        Long re_comment_id = commentService.write(board_id, comment_id, principal.getName(), requestDto);
+        Long re_commentId = commentService.write(boardId, commentId, principal.getName(), requestDto);
 
-        if (re_comment_id == null)
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(board_id + "번 댓글에 대한 " + comment_id + "번 대댓글 생성에 실패했습니다.");
+        if (re_commentId == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(board_id + "번 댓글에 대한 " + comment_id + "번 대댓글 생성에 성공했습니다.");
+        return ResponseEntity.status(HttpStatus.CREATED).body(boardId + "번 댓글에 대한 " + commentId + "번 대댓글 생성에 성공했습니다.");
     }
 
     @PutMapping("/{id}/comment")
