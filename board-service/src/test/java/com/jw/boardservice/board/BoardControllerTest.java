@@ -1,9 +1,6 @@
-package com.jw.boardservice;
+package com.jw.boardservice.board;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jw.boardservice.board.BoardController;
-import com.jw.boardservice.board.BoardDto;
-import com.jw.boardservice.board.BoardService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,8 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.jw.boardservice.board.BoardDto.*;
-import static com.jw.boardservice.board.BoardDto.BoardEditRequestDto;
-import static com.jw.boardservice.board.BoardDto.BoardWriteRequestDto;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -119,7 +114,7 @@ public class BoardControllerTest
         // mocking
 
         // when
-        when(boardService.delete(1L)).thenReturn(Boolean.TRUE);
+        when(boardService.delete(any(), eq(1L))).thenReturn(Boolean.TRUE);
 
         // then
         mockMvc.perform(MockMvcRequestBuilders.delete("/{id}", 1L))

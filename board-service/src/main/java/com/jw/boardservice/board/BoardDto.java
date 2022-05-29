@@ -1,5 +1,6 @@
 package com.jw.boardservice.board;
 
+import com.jw.boardservice.comment.CommentDto;
 import com.jw.boardservice.file.FileDto.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static com.jw.boardservice.comment.CommentDto.*;
 
 public class BoardDto
 {

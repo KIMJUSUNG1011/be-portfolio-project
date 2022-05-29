@@ -1,4 +1,4 @@
-package com.jw.boardservice;
+package com.jw.boardservice.board;
 
 import com.jw.boardservice.board.Board;
 import com.jw.boardservice.board.BoardRepository;
@@ -79,8 +79,8 @@ class BoardServiceTest
         when(boardRepository.findById(board.getId())).thenReturn(Optional.of(board));
 
         // when
-        Boolean result = boardService.delete(board.getId());
-        Boolean result2 = boardService.delete(100L);
+        Boolean result = boardService.delete("email", board.getId());
+        Boolean result2 = boardService.delete("email", 100L);
 
         // then
         assertThat(result).isEqualTo(true);

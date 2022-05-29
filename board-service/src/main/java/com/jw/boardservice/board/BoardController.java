@@ -47,9 +47,9 @@ public class BoardController
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> delete(@PathVariable("id") Long id)
+    public ResponseEntity<Boolean> delete(Principal principal, @PathVariable("id") Long id)
     {
-        Boolean result = boardService.delete(id);
+        Boolean result = boardService.delete(principal.getName(), id);
 
         if(!result)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);

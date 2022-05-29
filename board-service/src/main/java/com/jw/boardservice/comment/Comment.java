@@ -44,6 +44,11 @@ public class Comment extends BaseTimeEntity
         this.content = content;
     }
 
+    public void update(Comment comment)
+    {
+        content = comment.content;
+    }
+
     public void mapBoard(Board board)
     {
         this.board = board;

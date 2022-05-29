@@ -4,6 +4,7 @@ import com.jw.boardservice.board.BoardDto.BoardEditRequestDto;
 import com.jw.boardservice.board.BoardDto.BoardListResponseDto;
 import com.jw.boardservice.board.BoardDto.BoardReadResponseDto;
 import com.jw.boardservice.board.BoardDto.BoardWriteRequestDto;
+import com.jw.boardservice.comment.CommentRepository;
 import com.jw.boardservice.file.FileDto.FileReadResponseDto;
 import com.jw.boardservice.file.FileDto.FileWriteRequestDto;
 import com.jw.boardservice.file.FileEntity;
@@ -28,6 +29,7 @@ public class BoardService
 {
     private final BoardRepository boardRepository;
     private final FileRepository fileRepository;
+    private final CommentRepository commentRepository;
 
     public Long write(String email, BoardWriteRequestDto requestDto, List<MultipartFile> files) throws Exception
     {
@@ -54,10 +56,13 @@ public class BoardService
         return true;
     }
 
-    public Boolean delete(Long id)
+    public Boolean delete(String email, Long id)
     {
         Board board = boardRepository.findById(id).orElse(null);
         if(board == null)
+            return false;
+
+        if(!email.equals(board.getEmail()))
             return false;
 
         boardRepository.delete(board);
@@ -75,7 +80,7 @@ public class BoardService
             board.increaseViewCount();
 
         BoardReadResponseDto responseDto = new ModelMapper().map(board, BoardReadResponseDto.class);
-        attachFilesToBoard(responseDto);
+        setPathToFiles(responseDto);
 
         return responseDto;
     }
@@ -111,7 +116,7 @@ public class BoardService
         }
     }
 
-    private void attachFilesToBoard(BoardReadResponseDto responseDto)
+    private void setPathToFiles(BoardReadResponseDto responseDto)
     {
         String location = System.getProperty("java.io.tmpdir");
 
