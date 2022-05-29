@@ -1,6 +1,7 @@
 package com.jw.boardservice.board;
 
 import com.jw.boardservice.BaseTimeEntity;
+import com.jw.boardservice.comment.Comment;
 import com.jw.boardservice.file.FileEntity;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,6 +28,9 @@ public class Board extends BaseTimeEntity
     @OneToMany(mappedBy = "board")
     private List<FileEntity> files = new ArrayList<>();
 
+    @OneToMany(mappedBy = "board")
+    private List<Comment> comments = new ArrayList<>();
+
     @Builder
     public Board(String title, String content, String email)
     {
@@ -50,5 +54,11 @@ public class Board extends BaseTimeEntity
     {
         files.add(fileEntity);
         fileEntity.mapBoard(this);
+    }
+
+    public void addComment(Comment comment)
+    {
+        comments.add(comment);
+        comment.mapBoard(this);
     }
 }

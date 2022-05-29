@@ -18,7 +18,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import static com.jw.userservice.UserDto.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -54,7 +53,7 @@ public class UserControllerTest
         String content = objectMapper.writeValueAsString(requestDto);
 
         // mocking
-//        given(userService.register(any())).willReturn(1L);
+        given(userService.register(any())).willReturn(1L);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/register")
                         .content(content)
@@ -72,7 +71,7 @@ public class UserControllerTest
         Principal mockPrincipal = mock(Principal.class);
 
         // mocking
-//        given(userService.update(any(), any())).willReturn(true);
+        given(userService.update(any(), any())).willReturn(true);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/update")
                         .principal(mockPrincipal)
