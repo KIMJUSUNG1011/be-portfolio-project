@@ -48,7 +48,7 @@ public class CommentController
     }
 
     @PutMapping("/{id}/comment")
-    public ResponseEntity<String> edit(Principal principal, @PathVariable Long id, CommentEditRequestDto requestDto)
+    public ResponseEntity<String> edit(Principal principal, @PathVariable Long id, @RequestBody CommentEditRequestDto requestDto)
     {
         Boolean result = commentService.edit(principal.getName(), id, requestDto);
         if(!result)
