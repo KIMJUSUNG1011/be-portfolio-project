@@ -38,7 +38,7 @@ public class BoardService
         return board.getId();
     }
 
-    public boolean edit(Long id, String email, BoardEditRequestDto requestDto)
+    public boolean edit(String email, Long id, BoardEditRequestDto requestDto)
     {
         Board board = boardRepository.findById(id).orElse(null);
 

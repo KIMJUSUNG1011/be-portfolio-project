@@ -38,7 +38,7 @@ public class BoardController
     @PutMapping("/{id}")
     public ResponseEntity<Long> edit(Principal principal, @PathVariable("id") Long id, @RequestBody BoardEditRequestDto requestDto)
     {
-        Boolean result = boardService.edit(id, principal.getName(), requestDto);
+        Boolean result = boardService.edit(principal.getName(), id, requestDto);
 
         if (result)
             return ResponseEntity.status(HttpStatus.CREATED).body(id);

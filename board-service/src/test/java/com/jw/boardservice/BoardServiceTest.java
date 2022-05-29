@@ -61,8 +61,8 @@ class BoardServiceTest
         when(boardRepository.findById(board.getId())).thenReturn(Optional.of(board));
 
         // when
-        Boolean result = boardService.edit(board.getId(), "이메일", requestDto);
-        Boolean result2 = boardService.edit(100L, "이메일", requestDto);
+        Boolean result = boardService.edit("이메일", board.getId(), requestDto);
+        Boolean result2 = boardService.edit("이메일", 100L, requestDto);
 
         // then
         assertThat(result).isEqualTo(true);
