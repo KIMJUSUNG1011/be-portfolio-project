@@ -2,28 +2,31 @@ package com.jw.boardservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jw.boardservice.board.BoardController;
+import com.jw.boardservice.board.BoardDto;
 import com.jw.boardservice.board.BoardService;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.result.StatusResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
+import javax.servlet.http.Cookie;
 import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import static com.jw.boardservice.board.BoardDto.*;
 import static com.jw.boardservice.board.BoardDto.BoardEditRequestDto;
 import static com.jw.boardservice.board.BoardDto.BoardWriteRequestDto;
 import static org.mockito.ArgumentMatchers.any;
@@ -59,6 +62,7 @@ public class BoardControllerTest
     }
 
     @Test
+    @DisplayName("글 조회 테스트")
     void write() throws Exception
     {
         // given
@@ -81,6 +85,7 @@ public class BoardControllerTest
     }
 
     @Test
+    @DisplayName("글 수정 테스트")
     void edit() throws Exception
     {
         // given
@@ -107,13 +112,15 @@ public class BoardControllerTest
     }
 
     @Test
+    @DisplayName("글 삭제 테스트")
     void delete() throws Exception
     {
         // given
         // mocking
-        when(boardService.delete(1L)).thenReturn(Boolean.TRUE);
 
         // when
+        when(boardService.delete(1L)).thenReturn(Boolean.TRUE);
+
         // then
         mockMvc.perform(MockMvcRequestBuilders.delete("/{id}", 1L))
                 .andExpect(statusResultMatchers.isOk());
@@ -123,22 +130,57 @@ public class BoardControllerTest
     }
 
     @Test
-    void read()
+    @DisplayName("글 조회 테스트")
+    void read() throws Exception
     {
         // given
+        // mocking
+        Cookie cookieWithView = new Cookie("latestView", "1");
+        Cookie cookieWithoutView = new Cookie("latestView", "1");
+        BoardReadResponseDto responseDto = new BoardReadResponseDto(1L, "제목", "내용", "이메일", 0, LocalDateTime.now(), null);
 
         // when
+        when(boardService.read(any(), eq(1L))).thenReturn(responseDto);
+        when(boardService.read(any(), eq(2L))).thenReturn(null);
 
         // then
+        mockMvc.perform(MockMvcRequestBuilders.get("/{id}", 1L)
+                                                .cookie(cookieWithView))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(statusResultMatchers.isOk());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/{id}", 1L)
+                                                .cookie(new Cookie("latest", "1")))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(statusResultMatchers.isOk());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/{id}", 2L)
+                                                .cookie(cookieWithoutView))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(statusResultMatchers.isNotFound());
     }
 
     @Test
-    void list()
+    @DisplayName("글 목록 테스트")
+    void list() throws Exception
     {
         // given
+        // mocking
+        List<BoardListResponseDto> responseDtos = new ArrayList<>();
+        BoardListResponseDto responseDto1 = new BoardListResponseDto(1L, "제목1", "이메일", 0, LocalDateTime.now());
+        BoardListResponseDto responseDto2 = new BoardListResponseDto(2L, "제목2", "이메일", 0, LocalDateTime.now());
+        responseDtos.add(responseDto1);
+        responseDtos.add(responseDto2);
 
         // when
-
         // then
+        when(boardService.list()).thenReturn(null);
+        mockMvc.perform(MockMvcRequestBuilders.get("/"))
+                .andExpect(statusResultMatchers.isNotFound());
+
+        when(boardService.list()).thenReturn(responseDtos);
+        mockMvc.perform(MockMvcRequestBuilders.get("/"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(statusResultMatchers.isOk());
     }
 }
