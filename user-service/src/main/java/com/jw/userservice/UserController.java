@@ -23,6 +23,8 @@ public class UserController
     {
         Long id = userService.register(requestDto);
 
+        System.out.println(id);
+
         if (id == null)
             return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 존재하는 회원입니다.");
 
@@ -33,6 +35,8 @@ public class UserController
     public ResponseEntity<String> update(Principal principal, @RequestBody UserUpdateRequestDto requestDto)
     {
         Boolean result = userService.update(principal.getName(), requestDto);
+
+        System.out.println(result);
 
         if (!result)
             return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body("사용자 정보 없데이트에 실패했습니다.");
