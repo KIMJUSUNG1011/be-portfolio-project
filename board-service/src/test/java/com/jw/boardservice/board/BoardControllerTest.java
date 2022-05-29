@@ -111,16 +111,18 @@ public class BoardControllerTest
     void delete() throws Exception
     {
         // given
-        // mocking
+        Principal mockPrincipal = mock(Principal.class);
 
         // when
         when(boardService.delete(any(), eq(1L))).thenReturn(Boolean.TRUE);
 
         // then
-        mockMvc.perform(MockMvcRequestBuilders.delete("/{id}", 1L))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/{id}", 1L)
+                                                .principal(mockPrincipal))
                 .andExpect(statusResultMatchers.isOk());
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/{id}", 2L))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/{id}", 2L)
+                                                .principal(mockPrincipal))
                 .andExpect(statusResultMatchers.isNotFound());
     }
 
