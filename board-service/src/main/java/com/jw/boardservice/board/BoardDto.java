@@ -73,6 +73,7 @@ public class BoardDto
         private String title;
         private String email;
         private int count;
+        private int commentCount;
         private LocalDateTime registerDate;
     }
 }

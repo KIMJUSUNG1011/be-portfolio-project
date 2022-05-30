@@ -26,6 +26,8 @@ public class CommentService
         if (comment == null)
             return null;
 
+        board.addComment(comment);
+
         return comment.getId();
     }
 
@@ -42,6 +44,8 @@ public class CommentService
         Comment comment = commentRepository.save(requestDto.toEntity(email, board, parent));
         if (comment == null)
             return null;
+
+        board.addComment(comment);
 
         return comment.getId();
     }

@@ -90,8 +90,12 @@ public class BoardService
     {
         List<Board> boardList = boardRepository.findAll();
         List<BoardListResponseDto> responseDtoList = new ArrayList<>();
-        for(Board board : boardList)
-            responseDtoList.add(new ModelMapper().map(board, BoardListResponseDto.class));
+
+        for(Board board : boardList) {
+            BoardListResponseDto responseDto = new ModelMapper().map(board, BoardListResponseDto.class);
+            responseDto.setCommentCount(board.getComments().size());
+            responseDtoList.add(responseDto);
+        }
 
         return responseDtoList;
     }
