@@ -23,3 +23,10 @@
 | delete | /{id}    | 글 삭제    | Boolean | OK | NOT_FOUND |
 | get | /{id} | 글 조회 | Board | OK | NOT_FOUND |
 | get | / | 글 목록 조회 | List<Board> | OK | NOT_FOUND |  
+
+| method  | uri  | description  | return | success | fail |
+|:-----------|:--------------------------------------|:----------------|:--------------|:-------------------|:---------------------|
+| post | /{board_id}/comment | 댓글 작성 | String | CREATED | NOT_FOUND |
+| post | /{board_id}/{comment_id}/comment | 대댓글 작성 | String | CREATED | NOT_FOUND |  
+| put | /{id}/comment | 댓글 수정 | String | CREATED | NOT_MODIFIED |
+| delete | /{id}/comment | 댓글 삭제 | String | OK | NOT_FOUND |  
