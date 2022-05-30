@@ -23,3 +23,6 @@
 | delete | /{id}    | 글 삭제    | Boolean | OK | NOT_FOUND |
 | get | /{id} | 글 조회 | Board | OK | NOT_FOUND |
 | get | / | 글 목록 조회 | List<Board> | OK | NOT_FOUND |  
+
+| get | /{id} | 글 조회 | Board | OK | NOT_FOUND |
+| get | / | 글 목록 조회 | List<Board> | OK | NOT_FOUND |  
