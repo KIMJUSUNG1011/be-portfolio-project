@@ -39,9 +39,9 @@ public class CommentController
                                         @PathVariable("comment_id") Long commentId,
                                         @RequestBody CommentWriteRequestDto requestDto)
     {
-        Long re_commentId = commentService.write(boardId, commentId, principal.getName(), requestDto);
+        Long reCommentId = commentService.write(boardId, commentId, principal.getName(), requestDto);
 
-        if (re_commentId == null)
+        if (reCommentId == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(boardId + "번 댓글에 대한 " + commentId + "번 대댓글 생성에 성공했습니다.");

@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 public class CommentDto
 {
     @Data
@@ -54,5 +56,6 @@ public class CommentDto
         private String email;
         private String content;
         private Long parentId;
+        private LocalDateTime registerDate;
     }
 }

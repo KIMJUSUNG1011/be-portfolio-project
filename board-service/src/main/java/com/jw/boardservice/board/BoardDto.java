@@ -61,6 +61,7 @@ public class BoardDto
         private int count;
         private LocalDateTime registerDate;
         private List<FileReadResponseDto> files;
+        private List<CommentResponseDto> comments;
     }
 
     @Data

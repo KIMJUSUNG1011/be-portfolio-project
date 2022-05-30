@@ -36,7 +36,7 @@ public class CommentService
             return null;
 
         Comment parent = commentRepository.findById(parentId).orElse(null);
-        if (parent == null)
+        if (parent == null || parent.getParent() != null)
             return null;
 
         Comment comment = commentRepository.save(requestDto.toEntity(email, board, parent));
