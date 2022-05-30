@@ -74,4 +74,9 @@ public class CommentService
         commentRepository.delete(comment);
         return true;
     }
+
+    public Boolean likeOrDislike(String email, Long id)
+    {
+        return false;
+    }
 }

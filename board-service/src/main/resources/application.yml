@@ -31,6 +31,12 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 50MB
+  data:
+    mongodb:
+      host: ENC(4N0x74Uwu0FKINe8YQgQzCe9NxIuyh9K3vgRPNepsxs86O5pa8iIOKNZPfvCOzXfWOYrtTZKwPxvMdxvS2lOkA==)
+      port: 27017
+      database: ENC(oflzpUT94PTq7w3Bux8ppw==)
+
 
 eureka:
   client:
