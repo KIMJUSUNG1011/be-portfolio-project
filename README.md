@@ -1,8 +1,7 @@
 # 백엔드 프로젝트입니다.
 
 ## 시스템 구조도
-![마이크로서비스 설계](https://user-images.githubusercontent.com/55542546/170990616-d3da3291-8cbd-491c-b59d-9ed8bbdb0544.jpg)
-
+![마이크로서비스 설계](https://user-images.githubusercontent.com/55542546/169332042-cc231e91-28fa-42de-b204-ea62556b2919.PNG)
 
 ## rest api
 ### user 마이크로서비스(/user-service)
@@ -24,6 +23,9 @@
 | delete | /{id}    | 글 삭제    | Boolean | OK | NOT_FOUND |
 | get | /{id} | 글 조회 | Board | OK | NOT_FOUND |
 | get | / | 글 목록 조회 | List<Board> | OK | NOT_FOUND |  
-
-| get | /{id} | 글 조회 | Board | OK | NOT_FOUND |
-| get | / | 글 목록 조회 | List<Board> | OK | NOT_FOUND |  
+  
+|:----------|:----------|:----------|:--------|:------------|:-----------|
+| post | /{board_id}/comment | 댓글 작성 | String | CREATED | NOT_FOUND |
+| post | /{board_id}/{comment_id}/comment | 대댓글 작성 | String | CREATED | NOT_FOUND |  
+| put |  | /{id}/comment | 댓글 수정 | String | CREATED | NOT_MODIFIED |
+| delete | /{id}/comment | 댓글 삭제 | String | OK | NOT_FOUND |  
