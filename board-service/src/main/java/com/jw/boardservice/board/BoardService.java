@@ -4,7 +4,6 @@ import com.jw.boardservice.board.BoardDto.BoardEditRequestDto;
 import com.jw.boardservice.board.BoardDto.BoardListResponseDto;
 import com.jw.boardservice.board.BoardDto.BoardReadResponseDto;
 import com.jw.boardservice.board.BoardDto.BoardWriteRequestDto;
-import com.jw.boardservice.comment.CommentRepository;
 import com.jw.boardservice.file.FileDto.FileReadResponseDto;
 import com.jw.boardservice.file.FileDto.FileWriteRequestDto;
 import com.jw.boardservice.file.FileEntity;
@@ -29,13 +28,26 @@ public class BoardService
 {
     private final BoardRepository boardRepository;
     private final FileRepository fileRepository;
-    private final CommentRepository commentRepository;
+    private final BoardRepositoryForMongo boardMongoRepository;
 
     public Long write(String email, BoardWriteRequestDto requestDto, List<MultipartFile> files) throws Exception
     {
         Board board = boardRepository.save(requestDto.toEntity(email));
 
         uploadFiles(board, files);
+
+        // mongodb test
+        BoardForLikeOrDislike boardForLikeOrDislike = new BoardForLikeOrDislike();
+        List<Long> likes = new ArrayList<>();
+        List<Long> dislikes = new ArrayList<>();
+        for (int i = 1; i < 4; i++){
+            likes.add((long) i);
+            dislikes.add((long) i);
+        }
+        boardForLikeOrDislike.setId(1L);
+        boardForLikeOrDislike.setUsersWhoLiked(likes);
+        boardForLikeOrDislike.setUsersWhoLiked(dislikes);
+        boardMongoRepository.save(boardForLikeOrDislike);
 
         return board.getId();
     }

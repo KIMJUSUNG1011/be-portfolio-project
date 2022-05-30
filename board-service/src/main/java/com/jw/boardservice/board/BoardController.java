@@ -83,6 +83,12 @@ public class BoardController
         return ResponseEntity.status(HttpStatus.OK).body(boardList);
     }
 
+    @GetMapping("/{id}/{like_or_dislike}")
+    public ResponseEntity<String> likeOrDislike()
+    {
+        return null;
+    }
+
     private Cookie hasLatestViewCookie(Cookie[] cookies, String id)
     {
         final String name = "latestView";

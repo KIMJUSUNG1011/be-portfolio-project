@@ -35,6 +35,8 @@ spring:
     mongodb:
       host: ENC(4N0x74Uwu0FKINe8YQgQzCe9NxIuyh9K3vgRPNepsxs86O5pa8iIOKNZPfvCOzXfWOYrtTZKwPxvMdxvS2lOkA==)
       port: 27017
+      username: ENC(PTb/IuWrFbmFg5a3zOTRYBDz+YmSjUJf)
+      password: ENC(hp4RqhXJ7VmNi+7Rt6JfXxM1F7JZ4HQG
       database: ENC(oflzpUT94PTq7w3Bux8ppw==)
 
 

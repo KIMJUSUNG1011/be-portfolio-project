@@ -134,7 +134,7 @@ public class BoardControllerTest
         // mocking
         Cookie cookieWithView = new Cookie("latestView", "1");
         Cookie cookieWithoutView = new Cookie("latestView", "1");
-        BoardReadResponseDto responseDto = new BoardReadResponseDto(1L, "제목", "내용", "이메일", 0, LocalDateTime.now(), null);
+        BoardReadResponseDto responseDto = new BoardReadResponseDto(1L, "제목", "내용", "이메일", 0, LocalDateTime.now(), null, null);
 
         // when
         when(boardService.read(any(), eq(1L))).thenReturn(responseDto);
@@ -164,8 +164,8 @@ public class BoardControllerTest
         // given
         // mocking
         List<BoardListResponseDto> responseDtos = new ArrayList<>();
-        BoardListResponseDto responseDto1 = new BoardListResponseDto(1L, "제목1", "이메일", 0, LocalDateTime.now());
-        BoardListResponseDto responseDto2 = new BoardListResponseDto(2L, "제목2", "이메일", 0, LocalDateTime.now());
+        BoardListResponseDto responseDto1 = new BoardListResponseDto(1L, "제목1", "이메일", 0, 0, LocalDateTime.now());
+        BoardListResponseDto responseDto2 = new BoardListResponseDto(2L, "제목2", "이메일", 0, 0, LocalDateTime.now());
         responseDtos.add(responseDto1);
         responseDtos.add(responseDto2);
 
