@@ -24,7 +24,7 @@
 | get | /{id} | 글 조회 | Board | OK | NOT_FOUND |
 | get | / | 글 목록 조회 | List<Board> | OK | NOT_FOUND |  
 
-  테스트
+| method  | uri  | description  | return | success | fail |
 |:-----------|:--------------------------------------|:----------------|:--------------|:-------------------|:---------------------|
 | post | /{board_id}/comment | 댓글 작성 | String | CREATED | NOT_FOUND |
 | post | /{board_id}/{comment_id}/comment | 대댓글 작성 | String | CREATED | NOT_FOUND |  
