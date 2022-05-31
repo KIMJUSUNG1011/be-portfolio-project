@@ -1,5 +1,6 @@
 package com.jw.userservice;
 
+import com.jw.userservice.session.SessionDetails;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.GrantedAuthority;
@@ -73,11 +74,11 @@ public class UserService implements UserDetailsService
         if (userEntity == null)
             throw new UsernameNotFoundException(email);
 
-        UserEntityDto dto = new ModelMapper().map(userEntity, UserEntityDto.class);
+        SessionDetails sessionDetails = new ModelMapper().map(userEntity, SessionDetails.class);
         ArrayList<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("USER"));
-        dto.setAuthorities(authorities);
+        sessionDetails.setAuthorities(authorities);
 
-        return new User(userEntity.getEmail(), userEntity.getPassword(), authorities);
+        return sessionDetails;
     }
 }

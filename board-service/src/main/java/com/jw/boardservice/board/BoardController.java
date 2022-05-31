@@ -4,11 +4,13 @@ import com.jw.boardservice.board.BoardDto.BoardEditRequestDto;
 import com.jw.boardservice.board.BoardDto.BoardListResponseDto;
 import com.jw.boardservice.board.BoardDto.BoardReadResponseDto;
 import com.jw.boardservice.board.BoardDto.BoardWriteRequestDto;
+import com.jw.boardservice.session.SessionDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,11 +28,11 @@ public class BoardController
     private final BoardService boardService;
 
     @PostMapping(value = "/write", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Long> write(Principal principal,
+    public ResponseEntity<Long> write(@AuthenticationPrincipal SessionDetails sessionDetails,
                                       @RequestPart BoardWriteRequestDto requestDto,
                                       @RequestPart(value = "files", required = false) List<MultipartFile> files) throws Exception
     {
-        Long id = boardService.write(principal.getName(), requestDto, files);
+        Long id = boardService.write(sessionDetails.getEmail(), requestDto, files);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(id);
     }
