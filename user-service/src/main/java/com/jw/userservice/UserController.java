@@ -1,6 +1,6 @@
 package com.jw.userservice;
 
-import com.jw.userservice.session.SessionDetails;
+import com.jw.session.SessionDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
