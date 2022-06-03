@@ -36,19 +36,6 @@ public class BoardService
 
         uploadFiles(board, files);
 
-        // mongodb test
-        BoardForLikeOrDislike boardForLikeOrDislike = new BoardForLikeOrDislike();
-        List<Long> likes = new ArrayList<>();
-        List<Long> dislikes = new ArrayList<>();
-        for (int i = 1; i < 4; i++){
-            likes.add((long) i);
-            dislikes.add((long) i);
-        }
-        boardForLikeOrDislike.setId(1L);
-        boardForLikeOrDislike.setUsersWhoLiked(likes);
-        boardForLikeOrDislike.setUsersWhoLiked(dislikes);
-        boardMongoRepository.save(boardForLikeOrDislike);
-
         return board.getId();
     }
 
