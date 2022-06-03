@@ -53,22 +53,24 @@ public class BoardController
     {
         Boolean result = boardService.delete(principal.getName(), id);
 
-        if(!result)
+        if (!result)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BoardReadResponseDto> read(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") Long id)
+    public ResponseEntity<BoardReadResponseDto> read(HttpServletRequest request,
+                                                     HttpServletResponse response,
+                                                     @PathVariable("id") Long id)
     {
         Cookie cookie = hasLatestViewCookie(request.getCookies(), String.valueOf(id));
         BoardReadResponseDto readResponseDto = boardService.read(cookie, id);
 
-        if(readResponseDto == null)
+        if (readResponseDto == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 
-        if(cookie != null)
+        if (cookie != null)
             response.addCookie(cookie);
 
         return ResponseEntity.status(HttpStatus.OK).body(readResponseDto);
@@ -79,16 +81,27 @@ public class BoardController
     {
         List<BoardListResponseDto> boardList = boardService.list();
 
-        if(boardList == null)
+        if (boardList == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 
         return ResponseEntity.status(HttpStatus.OK).body(boardList);
     }
 
-    @GetMapping("/{id}/{like_or_dislike}")
-    public ResponseEntity<String> likeOrDislike()
+    @GetMapping("/{id}/{is_on_board}/{is_like}")
+    public ResponseEntity<String> likeOrDislike(@AuthenticationPrincipal SessionDetails sessionDetails,
+                                                @PathVariable("id") Long id,
+                                                @PathVariable("is_on_board") Boolean isOnBoard,
+                                                @PathVariable("is_like") Boolean isLike)
     {
-        return null;
+        Boolean result = boardService.likeOrDislike(sessionDetails.getId(), id, isOnBoard, isLike);
+
+        if (!result)
+            return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(null);
+
+        if (!isLike)
+            return ResponseEntity.status(HttpStatus.OK).body("비추천이 완료되었습니다.");
+
+        return ResponseEntity.status(HttpStatus.OK).body("추천이 완료되었습니다.");
     }
 
     private Cookie hasLatestViewCookie(Cookie[] cookies, String id)

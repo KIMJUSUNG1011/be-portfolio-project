@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface BoardRepositoryForMongo extends MongoRepository<Likes, String>
 {
     Optional<Likes> findByCommentId(Long commentId);
+    Optional<Likes> findByBoardId(Long boardId);
+    List<Likes> findAllByBoardIdAndCommentIdIsNull();
 }

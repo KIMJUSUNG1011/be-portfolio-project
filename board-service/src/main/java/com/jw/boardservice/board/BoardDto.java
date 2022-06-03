@@ -1,6 +1,5 @@
 package com.jw.boardservice.board;
 
-import com.jw.boardservice.comment.CommentDto;
 import com.jw.boardservice.file.FileDto.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -76,5 +75,7 @@ public class BoardDto
         private int count;
         private int commentCount;
         private LocalDateTime registerDate;
+        private int likesCount;
+        private int dislikesCount;
     }
 }

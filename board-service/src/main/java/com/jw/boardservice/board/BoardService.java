@@ -59,13 +59,18 @@ public class BoardService
     public Boolean delete(String email, Long id)
     {
         Board board = boardRepository.findById(id).orElse(null);
-        if(board == null)
+        if (board == null)
             return false;
 
-        if(!email.equals(board.getEmail()))
+        if (!email.equals(board.getEmail()))
+            return false;
+
+        Likes likes = boardMongoRepository.findByBoardId(id).orElse(null);
+        if (likes == null)
             return false;
 
         boardRepository.delete(board);
+        boardMongoRepository.delete(likes);
 
         return true;
     }
@@ -93,11 +98,17 @@ public class BoardService
     public List<BoardListResponseDto> list()
     {
         List<Board> boardList = boardRepository.findAll();
+        List<Likes> likesList = boardMongoRepository.findAllByBoardIdAndCommentIdIsNull();
         List<BoardListResponseDto> responseDtoList = new ArrayList<>();
 
-        for(Board board : boardList) {
+        for (int i = 0; i < boardList.size(); i++)
+        {
+            Board board = boardList.get(i);
+            Likes likes = likesList.get(i);
             BoardListResponseDto responseDto = new ModelMapper().map(board, BoardListResponseDto.class);
             responseDto.setCommentCount(board.getComments().size());
+            responseDto.setLikesCount(likes.getUserIdWhoLiked().size());
+            responseDto.setDislikesCount(likes.getUserIdWhoDisliked().size());
             responseDtoList.add(responseDto);
         }
 
