@@ -20,6 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
@@ -81,6 +82,10 @@ public class BoardService
         BoardReadResponseDto responseDto = new ModelMapper().map(board, BoardReadResponseDto.class);
         setPathToFiles(responseDto);
 
+        Likes likes = boardMongoRepository.findByBoardId(id).orElse(null);
+        LikesDto likesDto = new ModelMapper().map(likes, LikesDto.class);
+        responseDto.setLikes(likesDto);
+
         return responseDto;
     }
 
@@ -97,6 +102,39 @@ public class BoardService
         }
 
         return responseDtoList;
+    }
+
+    public boolean likeOrDislike(Long userId, Long id, Boolean isOnBoard, Boolean isLike)
+    {
+        Likes likes = isOnBoard ? boardMongoRepository.findByBoardId(id).orElse(null) : boardMongoRepository.findByCommentId(id).orElse(null);
+        if(likes == null)
+            likes = isOnBoard ? new Likes(id, 0L) : new Likes(0L, id);
+
+        boolean isAlreadyLiked = likes.getUserIdWhoLiked().contains(userId);
+        boolean isAlreadyDisliked = likes.getUserIdWhoDisliked().contains(userId);
+        if(!isAlreadyLiked && !isAlreadyDisliked)
+        {
+            if(isLike)
+                likes.addLikes(userId);
+            else
+                likes.addDislikes(userId);
+        }
+        else if(isAlreadyLiked)
+        {
+            if(isLike)
+                likes.removeLikes(userId);
+            else
+                return false;
+        }
+        else if(isAlreadyDisliked)
+        {
+            if(!isLike)
+                likes.removeDisliked(userId);
+            else
+                return false;
+        }
+
+        return true;
     }
 
     private void uploadFiles(Board board, List<MultipartFile> files) throws Exception

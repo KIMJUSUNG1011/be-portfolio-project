@@ -1,14 +1,13 @@
 package com.jw.boardservice.board;
 
-import lombok.Data;
+import lombok.Getter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Document
-@Data
+@Getter
 public class Likes
 {
     @Id
@@ -17,6 +16,32 @@ public class Likes
     private Long boardId;
     private Long commentId;
 
-    private List<Long> UserIdWhoLiked = new ArrayList<>();
-    private List<Long> userIdWhoDisliked = new ArrayList<>();
+    private Set<Long> userIdWhoLiked = new HashSet<>();
+    private Set<Long> userIdWhoDisliked = new HashSet<>();
+
+    public Likes(Long boardId, Long commentId)
+    {
+        this.boardId = boardId;
+        this.commentId = commentId;
+    }
+
+    public void addLikes(Long userId)
+    {
+        userIdWhoLiked.add(userId);
+    }
+
+    public void removeLikes(Long userId)
+    {
+        userIdWhoLiked.remove(userId);
+    }
+
+    public void addDislikes(Long userId)
+    {
+        userIdWhoDisliked.add(userId);
+    }
+
+    public void removeDisliked(Long userId)
+    {
+        userIdWhoDisliked.remove(userId);
+    }
 }

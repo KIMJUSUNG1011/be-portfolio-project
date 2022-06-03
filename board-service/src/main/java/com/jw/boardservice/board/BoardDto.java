@@ -62,6 +62,7 @@ public class BoardDto
         private LocalDateTime registerDate;
         private List<FileReadResponseDto> files;
         private List<CommentResponseDto> comments;
+        private LikesDto likes;
     }
 
     @Data
