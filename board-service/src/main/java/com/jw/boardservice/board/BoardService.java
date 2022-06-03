@@ -125,7 +125,7 @@ public class BoardService
 
     public boolean likeOrDislike(Long userId, Long boardId, Long commentId, Boolean isLike)
     {
-        Likes likes = (commentId == 0L) ? boardMongoRepository.findByBoardId(boardId).orElse(null)
+        Likes likes = (commentId == 0L) ? boardMongoRepository.findByBoardIdAndCommentIdIsNull(boardId).orElse(null)
                                         : boardMongoRepository.findByCommentId(commentId).orElse(null);
         if(likes == null)
             likes = (commentId == 0L) ? new Likes(boardId, 0L) : new Likes(boardId, commentId);
