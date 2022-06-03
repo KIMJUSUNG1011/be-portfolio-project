@@ -87,13 +87,13 @@ public class BoardController
         return ResponseEntity.status(HttpStatus.OK).body(boardList);
     }
 
-    @GetMapping("/{id}/{is_on_board}/{is_like}")
+    @GetMapping("/{board_id}/{comment_id}/{is_like}")
     public ResponseEntity<String> likeOrDislike(@AuthenticationPrincipal SessionDetails sessionDetails,
-                                                @PathVariable("id") Long id,
-                                                @PathVariable("is_on_board") Boolean isOnBoard,
+                                                @PathVariable("board_id") Long boardId,
+                                                @PathVariable("comment_id") Long commentId,
                                                 @PathVariable("is_like") Boolean isLike)
     {
-        Boolean result = boardService.likeOrDislike(sessionDetails.getId(), id, isOnBoard, isLike);
+        Boolean result = boardService.likeOrDislike(sessionDetails.getId(), boardId, commentId, isLike);
 
         if (!result)
             return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(null);
