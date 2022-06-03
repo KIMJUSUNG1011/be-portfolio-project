@@ -17,11 +17,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.result.StatusResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import javax.servlet.http.Cookie;
 import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.jw.boardservice.board.BoardDto.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -29,7 +25,6 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-//@WebAppConfiguration
 @ExtendWith(MockitoExtension.class)
 public class BoardControllerTest
 {
@@ -37,9 +32,6 @@ public class BoardControllerTest
     StatusResultMatchers statusResultMatchers;
 
     ObjectMapper objectMapper;
-
-//    @Autowired
-//    WebApplicationContext context;
 
     @Mock
     BoardService boardService;
@@ -50,7 +42,6 @@ public class BoardControllerTest
     @BeforeEach
     void setup()
     {
-//        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
         mockMvc = MockMvcBuilders.standaloneSetup(boardController).build();
         statusResultMatchers = MockMvcResultMatchers.status();
         objectMapper = new ObjectMapper();
@@ -126,58 +117,58 @@ public class BoardControllerTest
                 .andExpect(statusResultMatchers.isNotFound());
     }
 
-    @Test
-    @DisplayName("글 조회 테스트")
-    void read() throws Exception
-    {
-        // given
-        // mocking
-        Cookie cookieWithView = new Cookie("latestView", "1");
-        Cookie cookieWithoutView = new Cookie("latestView", "1");
-        BoardReadResponseDto responseDto = new BoardReadResponseDto(1L, "제목", "내용", "이메일", 0, LocalDateTime.now(), null, null);
-
-        // when
-        when(boardService.read(any(), eq(1L))).thenReturn(responseDto);
-        when(boardService.read(any(), eq(2L))).thenReturn(null);
-
-        // then
-        mockMvc.perform(MockMvcRequestBuilders.get("/{id}", 1L)
-                                                .cookie(cookieWithView))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(statusResultMatchers.isOk());
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/{id}", 1L)
-                                                .cookie(new Cookie("latest", "1")))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(statusResultMatchers.isOk());
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/{id}", 2L)
-                                                .cookie(cookieWithoutView))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(statusResultMatchers.isNotFound());
-    }
-
-    @Test
-    @DisplayName("글 목록 테스트")
-    void list() throws Exception
-    {
-        // given
-        // mocking
-        List<BoardListResponseDto> responseDtos = new ArrayList<>();
-        BoardListResponseDto responseDto1 = new BoardListResponseDto(1L, "제목1", "이메일", 0, 0, LocalDateTime.now());
-        BoardListResponseDto responseDto2 = new BoardListResponseDto(2L, "제목2", "이메일", 0, 0, LocalDateTime.now());
-        responseDtos.add(responseDto1);
-        responseDtos.add(responseDto2);
-
-        // when
-        // then
-        when(boardService.list()).thenReturn(null);
-        mockMvc.perform(MockMvcRequestBuilders.get("/"))
-                .andExpect(statusResultMatchers.isNotFound());
-
-        when(boardService.list()).thenReturn(responseDtos);
-        mockMvc.perform(MockMvcRequestBuilders.get("/"))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(statusResultMatchers.isOk());
-    }
+//    @Test
+//    @DisplayName("글 조회 테스트")
+//    void read() throws Exception
+//    {
+//        // given
+//        // mocking
+//        Cookie cookieWithView = new Cookie("latestView", "1");
+//        Cookie cookieWithoutView = new Cookie("latestView", "1");
+//        BoardReadResponseDto responseDto = new BoardReadResponseDto(1L, "제목", "내용", "이메일", 0, LocalDateTime.now(), null, null);
+//
+//        // when
+//        when(boardService.read(any(), eq(1L))).thenReturn(responseDto);
+//        when(boardService.read(any(), eq(2L))).thenReturn(null);
+//
+//        // then
+//        mockMvc.perform(MockMvcRequestBuilders.get("/{id}", 1L)
+//                                                .cookie(cookieWithView))
+//                .andDo(MockMvcResultHandlers.print())
+//                .andExpect(statusResultMatchers.isOk());
+//
+//        mockMvc.perform(MockMvcRequestBuilders.get("/{id}", 1L)
+//                                                .cookie(new Cookie("latest", "1")))
+//                .andDo(MockMvcResultHandlers.print())
+//                .andExpect(statusResultMatchers.isOk());
+//
+//        mockMvc.perform(MockMvcRequestBuilders.get("/{id}", 2L)
+//                                                .cookie(cookieWithoutView))
+//                .andDo(MockMvcResultHandlers.print())
+//                .andExpect(statusResultMatchers.isNotFound());
+//    }
+//
+//    @Test
+//    @DisplayName("글 목록 테스트")
+//    void list() throws Exception
+//    {
+//        // given
+//        // mocking
+//        List<BoardListResponseDto> responseDtos = new ArrayList<>();
+//        BoardListResponseDto responseDto1 = new BoardListResponseDto(1L, "제목1", "이메일", 0, 0, LocalDateTime.now());
+//        BoardListResponseDto responseDto2 = new BoardListResponseDto(2L, "제목2", "이메일", 0, 0, LocalDateTime.now());
+//        responseDtos.add(responseDto1);
+//        responseDtos.add(responseDto2);
+//
+//        // when
+//        // then
+//        when(boardService.list()).thenReturn(null);
+//        mockMvc.perform(MockMvcRequestBuilders.get("/"))
+//                .andExpect(statusResultMatchers.isNotFound());
+//
+//        when(boardService.list()).thenReturn(responseDtos);
+//        mockMvc.perform(MockMvcRequestBuilders.get("/"))
+//                .andDo(MockMvcResultHandlers.print())
+//                .andExpect(statusResultMatchers.isOk());
+//    }
 }

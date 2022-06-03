@@ -1,6 +1,8 @@
 package com.jw.boardservice.comment;
 
 import com.jw.boardservice.board.Board;
+import com.jw.boardservice.likes.Likes;
+import com.jw.boardservice.likes.LikesMongoRepository;
 import org.junit.jupiter.api.DisplayName;
 import com.jw.boardservice.board.BoardRepository;
 import org.junit.jupiter.api.Test;
@@ -24,13 +26,16 @@ import static org.mockito.Mockito.when;
 class CommentServiceTest
 {
     @Mock
-    CommentRepository commentRepository;
+    private CommentRepository commentRepository;
 
     @Mock
     private BoardRepository boardRepository;
 
+    @Mock
+    private LikesMongoRepository likesMongoRepository;
+
     @InjectMocks
-    CommentService commentService;
+    private CommentService commentService;
 
     @Test
     void write_댓글()
@@ -95,11 +100,15 @@ class CommentServiceTest
 
     @Test
     @DisplayName("댓글 삭제 테스트")
-    void delete() {
+    void delete()
+    {
         // given
         Comment comment = new Comment("이메일", "내용", null, null);
+        Likes commentLike = new Likes(1L, 1L);
+
         // mocking
         when(commentRepository.findById(comment.getId())).thenReturn(Optional.of(comment));
+        when(likesMongoRepository.findByCommentId(any())).thenReturn(Optional.ofNullable(commentLike));
 
         // when
         Boolean result = commentService.delete("이메일", comment.getId());

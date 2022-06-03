@@ -1,6 +1,7 @@
 package com.jw.boardservice.board;
 
 import com.jw.boardservice.file.FileDto.*;
+import com.jw.boardservice.likes.LikesDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;

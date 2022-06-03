@@ -2,6 +2,8 @@ package com.jw.boardservice.comment;
 
 import com.jw.boardservice.board.Board;
 import com.jw.boardservice.board.BoardRepository;
+import com.jw.boardservice.likes.Likes;
+import com.jw.boardservice.likes.LikesMongoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,7 @@ public class CommentService
 {
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
+    private final LikesMongoRepository likesMongoRepository;
 
     public Long write(Long boardId, String email, CommentWriteRequestDto requestDto)
     {
@@ -63,20 +66,21 @@ public class CommentService
         return true;
     }
 
-    public Boolean delete(String email, Long id) {
+    public Boolean delete(String email, Long id)
+    {
         Comment comment = commentRepository.findById(id).orElse(null);
         if (comment == null)
+            return false;
+
+        Likes commentLike = likesMongoRepository.findByCommentId(id).orElse(null);
+        if (commentLike == null)
             return false;
 
         if (!email.equals(comment.getEmail()))
             return false;
 
         commentRepository.delete(comment);
+        likesMongoRepository.delete(commentLike);
         return true;
-    }
-
-    public Boolean likeOrDislike(String email, Long id)
-    {
-        return false;
     }
 }

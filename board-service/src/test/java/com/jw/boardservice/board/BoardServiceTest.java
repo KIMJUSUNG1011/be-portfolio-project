@@ -1,8 +1,7 @@
 package com.jw.boardservice.board;
 
-import com.jw.boardservice.board.Board;
-import com.jw.boardservice.board.BoardRepository;
-import com.jw.boardservice.board.BoardService;
+import com.jw.boardservice.likes.Likes;
+import com.jw.boardservice.likes.LikesMongoRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +25,9 @@ class BoardServiceTest
 {
     @Mock
     BoardRepository boardRepository;
+
+    @Mock
+    LikesMongoRepository likesMongoRepository;
 
     @InjectMocks
     BoardService boardService;
@@ -74,9 +76,15 @@ class BoardServiceTest
     void delete()
     {
         Board board = new Board("title", "content", "email");
+        Likes boardLikes = new Likes(1L, null);
+        List<Likes> commentLikesList = new ArrayList<>();
+        commentLikesList.add(new Likes(1L, 1L));
+        commentLikesList.add(new Likes(1L, 2L));
 
         // mocking
         when(boardRepository.findById(board.getId())).thenReturn(Optional.of(board));
+        when(likesMongoRepository.findByBoardIdAndCommentIdIsNull(any())).thenReturn(Optional.ofNullable(boardLikes));
+        when(likesMongoRepository.findAllByBoardIdAndCommentIdIsNotNull(any())).thenReturn(commentLikesList);
 
         // when
         Boolean result = boardService.delete("email", board.getId());

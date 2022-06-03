@@ -1,14 +1,15 @@
-package com.jw.boardservice.board;
+package com.jw.boardservice.likes;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface BoardRepositoryForMongo extends MongoRepository<Likes, String>
+public interface LikesMongoRepository extends MongoRepository<Likes, String>
 {
     Optional<Likes> findByCommentId(Long commentId);
     Optional<Likes> findByBoardIdAndCommentIdIsNull(Long boardId);
+    List<Likes> findAllByBoardIdAndCommentIdIsNotNull(Long boardId);
     List<Likes> findAllByBoardIdOrderByCommentId(Long boardId);
     List<Likes> findAllCommentIdIsNullAndOrderByBoardId();
 }

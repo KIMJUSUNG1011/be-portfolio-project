@@ -1,7 +1,7 @@
 package com.jw.boardservice.comment;
 
 import com.jw.boardservice.board.Board;
-import com.jw.boardservice.board.LikesDto;
+import com.jw.boardservice.likes.LikesDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

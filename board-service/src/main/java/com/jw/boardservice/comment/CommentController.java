@@ -58,7 +58,8 @@ public class CommentController
     }
 
     @DeleteMapping("/{id}/comment")
-    public ResponseEntity<String> delete(Principal principal, @PathVariable Long id) {
+    public ResponseEntity<String> delete(Principal principal, @PathVariable Long id)
+    {
         Boolean result = commentService.delete(principal.getName(), id);
         if (!result)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("댓글 삭제에 실패했습니다.");
