@@ -1,4 +1,4 @@
-package com.jw.boardservice.board;
+package com.jw.boardservice.likes;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

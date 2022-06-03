@@ -4,11 +4,13 @@ import com.jw.boardservice.board.BoardDto.BoardEditRequestDto;
 import com.jw.boardservice.board.BoardDto.BoardListResponseDto;
 import com.jw.boardservice.board.BoardDto.BoardReadResponseDto;
 import com.jw.boardservice.board.BoardDto.BoardWriteRequestDto;
-import com.jw.boardservice.comment.CommentDto;
 import com.jw.boardservice.file.FileDto.FileReadResponseDto;
 import com.jw.boardservice.file.FileDto.FileWriteRequestDto;
 import com.jw.boardservice.file.FileEntity;
 import com.jw.boardservice.file.FileRepository;
+import com.jw.boardservice.likes.Likes;
+import com.jw.boardservice.likes.LikesDto;
+import com.jw.boardservice.likes.LikesMongoRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -31,7 +33,7 @@ public class BoardService
 {
     private final BoardRepository boardRepository;
     private final FileRepository fileRepository;
-    private final BoardRepositoryForMongo boardMongoRepository;
+    private final LikesMongoRepository likesMongoRepository;
 
     public Long write(String email, BoardWriteRequestDto requestDto, List<MultipartFile> files) throws Exception
     {
@@ -67,12 +69,20 @@ public class BoardService
         if (!email.equals(board.getEmail()))
             return false;
 
-        Likes likes = boardMongoRepository.findByBoardIdAndCommentIdIsNull(id).orElse(null);
-        if (likes == null)
+        Likes boardLikes = likesMongoRepository.findByBoardIdAndCommentIdIsNull(id).orElse(null);
+        if (boardLikes == null)
             return false;
 
+        List<Likes> commentLikes = likesMongoRepository.findAllByBoardIdAndCommentIdIsNotNull(id);
+
         boardRepository.delete(board);
-        boardMongoRepository.delete(likes);
+
+        likesMongoRepository.delete(boardLikes);
+
+        for (Likes likes : commentLikes)
+        {
+            likesMongoRepository.delete(likes);
+        }
 
         return true;
     }
@@ -89,7 +99,7 @@ public class BoardService
         BoardReadResponseDto responseDto = new ModelMapper().map(board, BoardReadResponseDto.class);
         setPathToFiles(responseDto);
 
-        List<Likes> likesList = boardMongoRepository.findAllByBoardIdOrderByCommentId(id);
+        List<Likes> likesList = likesMongoRepository.findAllByBoardIdOrderByCommentId(id);
         LikesDto likesDto = new ModelMapper().map(likesList.get(0), LikesDto.class);
         responseDto.setLikes(likesDto);
 
@@ -106,7 +116,7 @@ public class BoardService
     public List<BoardListResponseDto> list()
     {
         List<Board> boardList = boardRepository.findAll();
-        List<Likes> likesList = boardMongoRepository.findAllCommentIdIsNullAndOrderByBoardId();
+        List<Likes> likesList = likesMongoRepository.findAllCommentIdIsNullAndOrderByBoardId();
         List<BoardListResponseDto> responseDtoList = new ArrayList<>();
 
         for (int i = 0; i < boardList.size(); i++)
@@ -125,8 +135,8 @@ public class BoardService
 
     public boolean likeOrDislike(Long userId, Long boardId, Long commentId, Boolean isLike)
     {
-        Likes likes = (commentId == 0L) ? boardMongoRepository.findByBoardIdAndCommentIdIsNull(boardId).orElse(null)
-                                        : boardMongoRepository.findByCommentId(commentId).orElse(null);
+        Likes likes = (commentId == 0L) ? likesMongoRepository.findByBoardIdAndCommentIdIsNull(boardId).orElse(null)
+                                        : likesMongoRepository.findByCommentId(commentId).orElse(null);
         if(likes == null)
             likes = (commentId == 0L) ? new Likes(boardId, 0L) : new Likes(boardId, commentId);
 
@@ -154,7 +164,7 @@ public class BoardService
                 return false;
         }
 
-        boardMongoRepository.save(likes);
+        likesMongoRepository.save(likes);
         return true;
     }
 

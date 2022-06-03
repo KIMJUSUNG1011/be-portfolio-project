@@ -1,6 +1,8 @@
 package com.jw.boardservice.board;
 
 import com.jw.boardservice.comment.Comment;
+import com.jw.boardservice.likes.Likes;
+import com.jw.boardservice.likes.LikesMongoRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,7 +28,7 @@ class BoardServiceTest
     @Mock
     BoardRepository boardRepository;
     @Mock
-    BoardRepositoryForMongo boardMongoRepository;
+    LikesMongoRepository likesMongoRepository;
 
     @InjectMocks
     BoardService boardService;
@@ -75,9 +77,15 @@ class BoardServiceTest
     void delete()
     {
         Board board = new Board("title", "content", "email");
+        Likes boardLikes = new Likes(1L, null);
+        List<Likes> commentLikesList = new ArrayList<>();
+        commentLikesList.add(new Likes(1L, 1L));
+        commentLikesList.add(new Likes(1L, 2L));
 
         // mocking
         when(boardRepository.findById(board.getId())).thenReturn(Optional.of(board));
+        when(likesMongoRepository.findByBoardIdAndCommentIdIsNull(any())).thenReturn(Optional.ofNullable(boardLikes));
+        when(likesMongoRepository.findAllByBoardIdAndCommentIdIsNotNull(any())).thenReturn(commentLikesList);
 
         // when
         Boolean result = boardService.delete("email", board.getId());
@@ -99,7 +107,7 @@ class BoardServiceTest
 
         // mocking
         when(boardRepository.findById(board.getId())).thenReturn(Optional.of(board));
-        when(boardMongoRepository.findAllByBoardIdOrderByCommentId(board.getId())).thenReturn(likesList);
+        when(likesMongoRepository.findAllByBoardIdOrderByCommentId(board.getId())).thenReturn(likesList);
 
         // when
         BoardReadResponseDto readResponseDto = boardService.read(null, board.getId());
@@ -122,7 +130,7 @@ class BoardServiceTest
 
         // mocking
         when(boardRepository.findById(board.getId())).thenReturn(Optional.of(board));
-        when(boardMongoRepository.findAllByBoardIdOrderByCommentId(board.getId())).thenReturn(likesList);
+        when(likesMongoRepository.findAllByBoardIdOrderByCommentId(board.getId())).thenReturn(likesList);
 
         // when
         BoardReadResponseDto responseDto = boardService.read(cookie, board.getId());
@@ -151,7 +159,7 @@ class BoardServiceTest
         likesList.add(new Likes("id2", board2.getId(), 0L, new HashSet<>(), new HashSet<>()));
 
         when(boardRepository.findAll()).thenReturn(list);
-        when(boardMongoRepository.findAllCommentIdIsNullAndOrderByBoardId()).thenReturn(likesList);
+        when(likesMongoRepository.findAllCommentIdIsNullAndOrderByBoardId()).thenReturn(likesList);
 
         // when
         List<BoardListResponseDto> findList = boardService.list();
@@ -174,8 +182,8 @@ class BoardServiceTest
         Likes likesOnComment = new Likes(board.getId(), comment.getId());
 
         // mocking
-        when(boardMongoRepository.findByBoardIdAndCommentIdIsNull(board.getId())).thenReturn(Optional.of(likesOnBoard));
-        when(boardMongoRepository.findByCommentId(comment.getId())).thenReturn(Optional.of(likesOnComment));
+        when(likesMongoRepository.findByBoardIdAndCommentIdIsNull(board.getId())).thenReturn(Optional.of(likesOnBoard));
+        when(likesMongoRepository.findByCommentId(comment.getId())).thenReturn(Optional.of(likesOnComment));
 
         // when
         boardService.likeOrDislike(1L, board.getId(), 0L, true);

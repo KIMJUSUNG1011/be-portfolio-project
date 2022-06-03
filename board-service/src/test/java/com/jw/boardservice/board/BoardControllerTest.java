@@ -1,7 +1,6 @@
 package com.jw.boardservice.board;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jw.boardservice.comment.CommentDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,13 +24,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.jw.boardservice.board.BoardDto.*;
-import static com.jw.boardservice.comment.CommentDto.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-//@WebAppConfiguration
 @ExtendWith(MockitoExtension.class)
 public class BoardControllerTest
 {
@@ -39,9 +36,6 @@ public class BoardControllerTest
     StatusResultMatchers statusResultMatchers;
 
     ObjectMapper objectMapper;
-
-//    @Autowired
-//    WebApplicationContext context;
 
     @Mock
     BoardService boardService;
@@ -52,7 +46,6 @@ public class BoardControllerTest
     @BeforeEach
     void setup()
     {
-//        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
         mockMvc = MockMvcBuilders.standaloneSetup(boardController).build();
         statusResultMatchers = MockMvcResultMatchers.status();
         objectMapper = new ObjectMapper();
@@ -120,11 +113,11 @@ public class BoardControllerTest
 
         // then
         mockMvc.perform(MockMvcRequestBuilders.delete("/{id}", 1L)
-                                                .principal(mockPrincipal))
+                .principal(mockPrincipal))
                 .andExpect(statusResultMatchers.isOk());
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/{id}", 2L)
-                                                .principal(mockPrincipal))
+                .principal(mockPrincipal))
                 .andExpect(statusResultMatchers.isNotFound());
     }
 
@@ -137,7 +130,7 @@ public class BoardControllerTest
         Cookie cookieWithView = new Cookie("latestView", "1");
         Cookie cookieWithoutView = new Cookie("latestView", "1");
         BoardReadResponseDto responseDto = new BoardReadResponseDto(1L, "제목", "내용", "이메일",
-                                                0, LocalDateTime.now(), null, null, null);
+                0, LocalDateTime.now(), null, null, null);
 
         // when
         when(boardService.read(any(), eq(1L))).thenReturn(responseDto);
@@ -145,17 +138,17 @@ public class BoardControllerTest
 
         // then
         mockMvc.perform(MockMvcRequestBuilders.get("/{id}", 1L)
-                                                .cookie(cookieWithView))
+                .cookie(cookieWithView))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(statusResultMatchers.isOk());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/{id}", 1L)
-                                                .cookie(new Cookie("latest", "1")))
+                .cookie(new Cookie("latest", "1")))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(statusResultMatchers.isOk());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/{id}", 2L)
-                                                .cookie(cookieWithoutView))
+                .cookie(cookieWithoutView))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(statusResultMatchers.isNotFound());
     }

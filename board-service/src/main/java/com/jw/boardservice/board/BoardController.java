@@ -49,14 +49,14 @@ public class BoardController
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> delete(Principal principal, @PathVariable("id") Long id)
+    public ResponseEntity<String> delete(Principal principal, @PathVariable("id") Long id)
     {
         Boolean result = boardService.delete(principal.getName(), id);
 
         if (!result)
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 
-        return ResponseEntity.status(HttpStatus.OK).body(result);
+        return ResponseEntity.status(HttpStatus.OK).body("게시판이 삭제되었습니다.");
     }
 
     @GetMapping("/{id}")
