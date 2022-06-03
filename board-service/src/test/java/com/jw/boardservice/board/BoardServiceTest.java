@@ -1,8 +1,6 @@
 package com.jw.boardservice.board;
 
-import com.jw.boardservice.board.Board;
-import com.jw.boardservice.board.BoardRepository;
-import com.jw.boardservice.board.BoardService;
+import com.jw.boardservice.comment.Comment;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +25,8 @@ class BoardServiceTest
 {
     @Mock
     BoardRepository boardRepository;
+    @Mock
+    BoardRepositoryForMongo boardMongoRepository;
 
     @InjectMocks
     BoardService boardService;
@@ -93,9 +94,12 @@ class BoardServiceTest
     {
         // given
         Board board = new Board("title", "content", "email");
+        List<Likes> likesList = new ArrayList<>();
+        likesList.add(new Likes(board.getId(), 0L));
 
         // mocking
         when(boardRepository.findById(board.getId())).thenReturn(Optional.of(board));
+        when(boardMongoRepository.findAllByBoardIdOrderByCommentId(board.getId())).thenReturn(likesList);
 
         // when
         BoardReadResponseDto readResponseDto = boardService.read(null, board.getId());
@@ -103,6 +107,7 @@ class BoardServiceTest
         // then
         assertThat(readResponseDto.getId()).isEqualTo(board.getId());
         assertThat(readResponseDto.getCount()).isEqualTo(0);
+        assertThat(readResponseDto.getLikes().getBoardId()).isEqualTo(readResponseDto.getId());
     }
 
     @Test
@@ -112,9 +117,12 @@ class BoardServiceTest
         // given
         Board board = new Board("title", "content", "email");
         Cookie cookie = new Cookie("latestView", String.valueOf(board.getId()));
+        List<Likes> likesList = new ArrayList<>();
+        likesList.add(new Likes(board.getId(), 0L));
 
         // mocking
         when(boardRepository.findById(board.getId())).thenReturn(Optional.of(board));
+        when(boardMongoRepository.findAllByBoardIdOrderByCommentId(board.getId())).thenReturn(likesList);
 
         // when
         BoardReadResponseDto responseDto = boardService.read(cookie, board.getId());
@@ -122,6 +130,7 @@ class BoardServiceTest
         // then
         assertThat(responseDto.getId()).isEqualTo(board.getId());
         assertThat(responseDto.getCount()).isEqualTo(1);
+        assertThat(responseDto.getLikes().getBoardId()).isEqualTo(responseDto.getId());
     }
 
     @Test
@@ -135,14 +144,48 @@ class BoardServiceTest
         list.add(board1);
         list.add(board2);
 
+        List<Likes> likesList = new ArrayList<>();
+        Likes likes = new Likes("id1", board1.getId(), 0L, new HashSet<>(), new HashSet<>());
+        likes.addLikes(1L);
+        likesList.add(likes);
+        likesList.add(new Likes("id2", board2.getId(), 0L, new HashSet<>(), new HashSet<>()));
+
         when(boardRepository.findAll()).thenReturn(list);
+        when(boardMongoRepository.findAllCommentIdIsNullAndOrderByBoardId()).thenReturn(likesList);
 
         // when
         List<BoardListResponseDto> findList = boardService.list();
 
         // then
         assertThat(findList.get(0).getTitle()).isEqualTo(board1.getTitle());
+        assertThat(findList.get(0).getLikesCount()).isEqualTo(1);
         assertThat(findList.get(1).getTitle()).isNotEqualTo(board1.getTitle());
         assertThat(findList.get(1).getTitle()).isEqualTo(board2.getTitle());
+    }
+
+    @Test
+    @DisplayName("좋아요/싫어요 테스트")
+    void likeOrDislike()
+    {
+        // given
+        Board board = new Board("title", "content", "email");
+        Comment comment = new Comment(1L, "이메일", "내용", board, null, new ArrayList());
+        Likes likesOnBoard = new Likes(board.getId(), 0L);
+        Likes likesOnComment = new Likes(board.getId(), comment.getId());
+
+        // mocking
+        when(boardMongoRepository.findByBoardIdAndCommentIdIsNull(board.getId())).thenReturn(Optional.of(likesOnBoard));
+        when(boardMongoRepository.findByCommentId(comment.getId())).thenReturn(Optional.of(likesOnComment));
+
+        // when
+        boardService.likeOrDislike(1L, board.getId(), 0L, true);
+        boardService.likeOrDislike(1L, board.getId(), 1L, false);
+
+        // then
+        assertThat(likesOnBoard.getUserIdWhoLiked().size()).isEqualTo(1);
+        assertThat(likesOnComment.getUserIdWhoDisliked().size()).isEqualTo(1);
+
+        boardService.likeOrDislike(1L, board.getId(), 1L, false);
+        assertThat(likesOnComment.getUserIdWhoDisliked().size()).isEqualTo(0);
     }
 }

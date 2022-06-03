@@ -67,7 +67,7 @@ public class BoardService
         if (!email.equals(board.getEmail()))
             return false;
 
-        Likes likes = boardMongoRepository.findByBoardId(id).orElse(null);
+        Likes likes = boardMongoRepository.findByBoardIdAndCommentIdIsNull(id).orElse(null);
         if (likes == null)
             return false;
 
@@ -95,7 +95,7 @@ public class BoardService
 
         for(int i=1; i<likesList.size(); i++)
         {
-            CommentResponseDto commentResponseDto = responseDto.getComments().get(i);
+            CommentResponseDto commentResponseDto = responseDto.getComments().get(i-1);
             commentResponseDto.setLikes(new ModelMapper().map(likesList.get(i), LikesDto.class));
         }
 
@@ -154,6 +154,7 @@ public class BoardService
                 return false;
         }
 
+        boardMongoRepository.save(likes);
         return true;
     }
 

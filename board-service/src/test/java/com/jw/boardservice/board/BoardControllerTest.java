@@ -1,6 +1,7 @@
 package com.jw.boardservice.board;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jw.boardservice.comment.CommentDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.jw.boardservice.board.BoardDto.*;
+import static com.jw.boardservice.comment.CommentDto.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -134,7 +136,8 @@ public class BoardControllerTest
         // mocking
         Cookie cookieWithView = new Cookie("latestView", "1");
         Cookie cookieWithoutView = new Cookie("latestView", "1");
-        BoardReadResponseDto responseDto = new BoardReadResponseDto(1L, "제목", "내용", "이메일", 0, LocalDateTime.now(), null, null);
+        BoardReadResponseDto responseDto = new BoardReadResponseDto(1L, "제목", "내용", "이메일",
+                                                0, LocalDateTime.now(), null, null, null);
 
         // when
         when(boardService.read(any(), eq(1L))).thenReturn(responseDto);
@@ -164,8 +167,10 @@ public class BoardControllerTest
         // given
         // mocking
         List<BoardListResponseDto> responseDtos = new ArrayList<>();
-        BoardListResponseDto responseDto1 = new BoardListResponseDto(1L, "제목1", "이메일", 0, 0, LocalDateTime.now());
-        BoardListResponseDto responseDto2 = new BoardListResponseDto(2L, "제목2", "이메일", 0, 0, LocalDateTime.now());
+        BoardListResponseDto responseDto1 = new BoardListResponseDto(1L, "제목1", "이메일", 0,
+                0, LocalDateTime.now(), 0, 0);
+        BoardListResponseDto responseDto2 = new BoardListResponseDto(2L, "제목2", "이메일", 0,
+                0, LocalDateTime.now(), 0, 0);
         responseDtos.add(responseDto1);
         responseDtos.add(responseDto2);
 

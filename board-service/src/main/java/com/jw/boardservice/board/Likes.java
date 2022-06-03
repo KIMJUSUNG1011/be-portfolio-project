@@ -1,5 +1,6 @@
 package com.jw.boardservice.board;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -8,6 +9,7 @@ import java.util.*;
 
 @Document
 @Getter
+@AllArgsConstructor
 public class Likes
 {
     @Id
