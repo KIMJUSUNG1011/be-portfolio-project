@@ -4,6 +4,7 @@ import com.jw.boardservice.board.BoardDto.BoardEditRequestDto;
 import com.jw.boardservice.board.BoardDto.BoardListResponseDto;
 import com.jw.boardservice.board.BoardDto.BoardReadResponseDto;
 import com.jw.boardservice.board.BoardDto.BoardWriteRequestDto;
+import com.jw.boardservice.comment.CommentDto;
 import com.jw.boardservice.file.FileDto.FileReadResponseDto;
 import com.jw.boardservice.file.FileDto.FileWriteRequestDto;
 import com.jw.boardservice.file.FileEntity;
@@ -21,6 +22,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import static com.jw.boardservice.comment.CommentDto.*;
 
 @RequiredArgsConstructor
 @Service
@@ -87,9 +90,15 @@ public class BoardService
         BoardReadResponseDto responseDto = new ModelMapper().map(board, BoardReadResponseDto.class);
         setPathToFiles(responseDto);
 
-        Likes likes = boardMongoRepository.findByBoardId(id).orElse(null);
-        LikesDto likesDto = new ModelMapper().map(likes, LikesDto.class);
+        List<Likes> likesList = boardMongoRepository.findAllByBoardIdOrderByCommentId(id);
+        LikesDto likesDto = new ModelMapper().map(likesList.get(0), LikesDto.class);
         responseDto.setLikes(likesDto);
+
+        for(int i=1; i<likesList.size(); i++)
+        {
+            CommentResponseDto commentResponseDto = responseDto.getComments().get(i);
+            commentResponseDto.setLikes(new ModelMapper().map(likesList.get(i), LikesDto.class));
+        }
 
         return responseDto;
     }
@@ -115,11 +124,12 @@ public class BoardService
         return responseDtoList;
     }
 
-    public boolean likeOrDislike(Long userId, Long id, Boolean isOnBoard, Boolean isLike)
+    public boolean likeOrDislike(Long userId, Long boardId, Long commentId, Boolean isLike)
     {
-        Likes likes = isOnBoard ? boardMongoRepository.findByBoardId(id).orElse(null) : boardMongoRepository.findByCommentId(id).orElse(null);
+        Likes likes = (commentId == 0L) ? boardMongoRepository.findByBoardId(boardId).orElse(null)
+                                        : boardMongoRepository.findByCommentId(commentId).orElse(null);
         if(likes == null)
-            likes = isOnBoard ? new Likes(id, 0L) : new Likes(0L, id);
+            likes = (commentId == 0L) ? new Likes(boardId, 0L) : new Likes(boardId, commentId);
 
         boolean isAlreadyLiked = likes.getUserIdWhoLiked().contains(userId);
         boolean isAlreadyDisliked = likes.getUserIdWhoDisliked().contains(userId);

@@ -1,6 +1,7 @@
 package com.jw.boardservice.comment;
 
 import com.jw.boardservice.board.Board;
+import com.jw.boardservice.board.LikesDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -57,5 +58,6 @@ public class CommentDto
         private String content;
         private Long parentId;
         private LocalDateTime registerDate;
+        private LikesDto likes;
     }
 }

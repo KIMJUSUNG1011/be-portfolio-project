@@ -29,6 +29,7 @@ public class Board extends BaseTimeEntity
     private List<FileEntity> files = new ArrayList<>();
 
     @OneToMany(mappedBy = "board")
+    @OrderBy("id ASC")
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
