@@ -21,7 +21,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import static com.jw.boardservice.comment.CommentDto.*;
 
@@ -107,7 +106,7 @@ public class BoardService
     public List<BoardListResponseDto> list()
     {
         List<Board> boardList = boardRepository.findAll();
-        List<Likes> likesList = boardMongoRepository.findAllByBoardIdAndCommentIdIsNull();
+        List<Likes> likesList = boardMongoRepository.findAllCommentIdIsNullAndOrderByBoardId();
         List<BoardListResponseDto> responseDtoList = new ArrayList<>();
 
         for (int i = 0; i < boardList.size(); i++)
