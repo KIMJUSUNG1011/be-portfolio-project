@@ -98,7 +98,7 @@ public class BoardService
     public List<BoardListResponseDto> list()
     {
         List<Board> boardList = boardRepository.findAll();
-        List<Likes> likesList = boardMongoRepository.findAllByBoardIdAndCommentIdIsNull();
+        List<Likes> likesList = boardMongoRepository.findAllCommentIdIsNull();
         List<BoardListResponseDto> responseDtoList = new ArrayList<>();
 
         for (int i = 0; i < boardList.size(); i++)
