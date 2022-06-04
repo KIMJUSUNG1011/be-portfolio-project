@@ -1,7 +1,7 @@
 # 백엔드 프로젝트입니다.
 
 ## 시스템 구조도
-![마이크로서비스 설계](https://user-images.githubusercontent.com/55542546/169332042-cc231e91-28fa-42de-b204-ea62556b2919.PNG)
+![마이크로서비스 설계-3](https://user-images.githubusercontent.com/55542546/172000908-9964f5c6-ef2e-4baf-a41e-5dd1c8154bca.jpg)
 
 ## rest api
 ### user 마이크로서비스(/user-service)
