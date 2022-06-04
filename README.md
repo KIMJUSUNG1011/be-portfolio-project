@@ -17,12 +17,13 @@
 ### board 마이크로서비스(/board-service)
 
 | method  | uri  | description  | return | success | fail |
-|:----------|:----------|:----------|:--------|:------------|:-----------|
+|:----------|:-----------------------------|:----------|:--------|:------------|:-----------|
 | post    | /write    | 글 작성   | Long | CREATED | |
 | put    | /{id}    | 글 수정    | Boolean | CREATED | NOT_FOUND |
 | delete | /{id}    | 글 삭제    | Boolean | OK | NOT_FOUND |
 | get | /{id} | 글 조회 | Board | OK | NOT_FOUND |
 | get | / | 글 목록 조회 | List<Board> | OK | NOT_FOUND |  
+| get | /{board_id}/{comment_id}/{is_like} | 글/댓글 추천/비추천 |  OK | NOT_MODIFIED |
 
 | method  | uri  | description  | return | success | fail |
 |:-----------|:--------------------------------------|:----------------|:--------------|:-------------------|:---------------------|
