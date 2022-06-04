@@ -40,6 +40,11 @@ spring:
       database: ENC(oflzpUT94PTq7w3Bux8ppw==)
       authentication-database: admin
 
+# mongodb query log
+logging:
+  level:
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+
 eureka:
   client:
     register-with-eureka: true

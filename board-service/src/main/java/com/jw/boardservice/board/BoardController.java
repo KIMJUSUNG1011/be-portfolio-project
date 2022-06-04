@@ -98,10 +98,7 @@ public class BoardController
         if (!result)
             return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(null);
 
-        if (!isLike)
-            return ResponseEntity.status(HttpStatus.OK).body("비추천이 완료되었습니다.");
-
-        return ResponseEntity.status(HttpStatus.OK).body("추천이 완료되었습니다.");
+        return ResponseEntity.status(HttpStatus.OK).body("요청이 처리되었습니다.");
     }
 
     private Cookie hasLatestViewCookie(Cookie[] cookies, String id)

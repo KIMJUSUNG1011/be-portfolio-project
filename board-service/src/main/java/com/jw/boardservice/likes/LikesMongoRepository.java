@@ -9,6 +9,7 @@ public interface LikesMongoRepository extends MongoRepository<Likes, String>
 {
     Optional<Likes> findByCommentId(Long commentId);
     Optional<Likes> findByBoardIdAndCommentIdIsNull(Long boardId);
+    Optional<Likes> findByBoardIdAndCommentId(Long boardId, Long commentId);
     List<Likes> findAllByBoardIdAndCommentIdIsNotNull(Long boardId);
     List<Likes> findAllByBoardIdOrderByCommentId(Long boardId);
     List<Likes> findAllCommentIdIsNullAndOrderByBoardId();

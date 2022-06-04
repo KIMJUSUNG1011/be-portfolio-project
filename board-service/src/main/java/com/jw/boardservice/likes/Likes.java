@@ -2,20 +2,25 @@ package com.jw.boardservice.likes;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
+import javax.persistence.OrderBy;
 import java.util.*;
 
 @Document
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class Likes
 {
     @Id
     private String id;
 
     private Long boardId;
+
+    @OrderBy("ASC")
     private Long commentId;
 
     private Set<Long> userIdWhoLiked = new HashSet<>();

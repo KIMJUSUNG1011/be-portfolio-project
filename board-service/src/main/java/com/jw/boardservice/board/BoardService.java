@@ -90,23 +90,45 @@ public class BoardService
     public BoardReadResponseDto read(Cookie cookie, Long id)
     {
         Board board = boardRepository.findById(id).orElse(null);
-        if(board == null)
+        if (board == null)
             return null;
 
-        if(cookie != null)
+        if (cookie != null)
             board.increaseViewCount();
 
         BoardReadResponseDto responseDto = new ModelMapper().map(board, BoardReadResponseDto.class);
         setPathToFiles(responseDto);
 
         List<Likes> likesList = likesMongoRepository.findAllByBoardIdOrderByCommentId(id);
-        LikesDto likesDto = new ModelMapper().map(likesList.get(0), LikesDto.class);
-        responseDto.setLikes(likesDto);
+        List<CommentResponseDto> commentsList = responseDto.getComments();
 
-        for(int i=1; i<likesList.size(); i++)
+        if (likesList.size() == 0)
+            return responseDto;
+
+        if (likesList.get(0).getCommentId() == null)
         {
-            CommentResponseDto commentResponseDto = responseDto.getComments().get(i-1);
-            commentResponseDto.setLikes(new ModelMapper().map(likesList.get(i), LikesDto.class));
+            LikesDto likesDto = new ModelMapper().map(likesList.get(0), LikesDto.class);
+            responseDto.setLikes(likesDto);
+        }
+
+        for (int i = 0, j = 1; i < commentsList.size() && j < likesList.size(); )
+        {
+            long cCommentId = commentsList.get(i).getId();
+            long lCommentId = likesList.get(j).getCommentId();
+
+            if (cCommentId == lCommentId)
+            {
+                commentsList.get(i).setLikes(new ModelMapper().map(likesList.get(j), LikesDto.class));
+                i++;
+                j++;
+            }
+            else if (cCommentId < lCommentId)
+            {
+                i++;
+            }
+            else {
+                j++;
+            }
         }
 
         return responseDto;
@@ -138,7 +160,7 @@ public class BoardService
         Likes likes = (commentId == 0L) ? likesMongoRepository.findByBoardIdAndCommentIdIsNull(boardId).orElse(null)
                                         : likesMongoRepository.findByCommentId(commentId).orElse(null);
         if(likes == null)
-            likes = (commentId == 0L) ? new Likes(boardId, 0L) : new Likes(boardId, commentId);
+            likes = (commentId == 0L) ? new Likes(boardId, null) : new Likes(boardId, commentId);
 
         boolean isAlreadyLiked = likes.getUserIdWhoLiked().contains(userId);
         boolean isAlreadyDisliked = likes.getUserIdWhoDisliked().contains(userId);
