@@ -24,8 +24,6 @@
 | get | /{id} | 글 조회 | Board | OK | NOT_FOUND |
 | get | / | 글 목록 조회 | List<Board> | OK | NOT_FOUND |  
 | get | /{board_id}/{is_like} | 글 추천/비추천 | String | OK | NOT_MODIFIED |
-| get | /{board_id}/{comment_id}/{is_like} | 댓글 추천/비추천 | String | OK | NOT_MODIFIED |
-  
 
 | method  | uri  | description  | return | success | fail |
 |:-----------|:--------------------------------------|:----------------|:--------------|:-------------------|:---------------------|
@@ -33,6 +31,7 @@
 | post | /{board_id}/{comment_id}/comment | 대댓글 작성 | String | CREATED | NOT_FOUND |  
 | put | /{id}/comment | 댓글 수정 | String | CREATED | NOT_MODIFIED |
 | delete | /{id}/comment | 댓글 삭제 | String | OK | NOT_FOUND |  
+| get | /{board_id}/{comment_id}/{is_like} | 댓글 추천/비추천 | String | OK | NOT_MODIFIED |
   
 | method  | uri  | description  | return | success | fail |
 |:-----------|:--------------------------------------|:----------------|:--------------|:-------------------|:---------------------|
