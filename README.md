@@ -34,5 +34,5 @@
   
 | method  | uri  | description  | return | success | fail |
 |:-----------|:--------------------------------------|:----------------|:--------------|:-------------------|:---------------------|
-| post | /{id}/report | 신고하기 | String | CREATED | NOT_FOUND
+| post |  | 신고하기 | Long | CREATED | NOT_FOUND
 
