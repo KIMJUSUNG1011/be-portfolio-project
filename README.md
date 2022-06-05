@@ -31,3 +31,8 @@
 | post | /{board_id}/{comment_id}/comment | 대댓글 작성 | String | CREATED | NOT_FOUND |  
 | put | /{id}/comment | 댓글 수정 | String | CREATED | NOT_MODIFIED |
 | delete | /{id}/comment | 댓글 삭제 | String | OK | NOT_FOUND |  
+  
+| method  | uri  | description  | return | success | fail |
+|:-----------|:--------------------------------------|:----------------|:--------------|:-------------------|:---------------------|
+| post | /{id}/report | 신고하기 | String | CREATED | NOT_FOUND
+
